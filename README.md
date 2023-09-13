@@ -16,3 +16,18 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs
 5. unit test exporting to csv and re-importing it to compare objects
 6. ldap objects
 7. import-export operation
+
+##### Functionalities
+
+|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
+|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
+|	People			|			|			|		|			|			|			|			|
+|	Dynamic Roles	|			|			|		|			|			|			|			|
+|	Static Roles	|			|			|		|			|			|			|			|
+|	Prov. Policies	|			|			|		|			|			|			|			|
+|	Activities		|			|			|		|			|			|			|			|
+|	Org. Container	|			|			|		|			|			|			|			|
+|	Services		|			|			|		|			|			|			|			|
+|	Access			|			|			|		|			|			|			|			|
+|	Groups			|			|			|		|			|			|			|			|
+|	Accounts		|			|			|		|			|			|			|			|
