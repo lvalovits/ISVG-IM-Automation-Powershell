@@ -16,10 +16,12 @@ function test_isim_connections_secure(){
 
 function test_isim_connections{
 	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.VA_HOST))){
-		Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
+		# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
+		write_log error "Connection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
 	}
 	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.APP_HOST))){
-		Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
+		# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
+		write_log error "Connection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
 	}
 	
 }

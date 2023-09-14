@@ -27,6 +27,6 @@ function _init_{
 		}		
 		write_log "info" "--- Initialization completed ---"
 	}catch{
-		Write-Error "Initialization failed"
+		# Write-Error "Initialization failed"
 	}
 }

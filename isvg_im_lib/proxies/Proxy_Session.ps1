@@ -1,23 +1,23 @@
 #
 #	usage:
-#		$session_proxy	=	[ISIM_Session_Proxy]::getProxy()
+#		$session_proxy	=	[Session_Proxy]::getProxy()
 #		$session_proxy.init() : void
 #		$session_proxy.login(<creds>) : void
 #		$session_proxy.logout(<raw_session>) : void
 #
 
-class ISIM_Session_Proxy{
+class Session_Proxy{
 	################# Singleton start #################
-    hidden static [ISIM_Session_Proxy] $_instance	=	[ISIM_Session_Proxy]::new()
+    hidden static [Session_Proxy] $_instance	=	[Session_Proxy]::new()
 
-    hidden ISIM_Session_Proxy() {}
+    hidden Session_Proxy() {}
 
-    hidden static [ISIM_Session_Proxy] getProxy() {
-        return [ISIM_Session_Proxy]::_instance
+    hidden static [Session_Proxy] getProxy() {
+        return [Session_Proxy]::_instance
     }
 	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$PROPERTY_FILE.ENDPOINTS.SESSION
+	[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
 	$proxy_session			=	$null
 	$namespace_session		=	$null
 

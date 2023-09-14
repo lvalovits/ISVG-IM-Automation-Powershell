@@ -24,7 +24,7 @@ function write_log(){
 			[string]	$Message
 		)
 
-	$log_message	=	"$(timeStamp) - " + "[" + $category.ToUpper() + "]" + "	" + $message
+	$log_message	=	"$(timeStamp)	-	" + "[" + $category.ToUpper() + "]" + "	" + $message
 	
 	Add-content $PROPERTY_FILE.LIB.LOG_FILE -value $log_message
 	
