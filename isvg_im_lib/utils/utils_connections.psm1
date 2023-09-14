@@ -53,6 +53,7 @@ function CheckSSL($fqdn, $port=443)
     $tcpStream = $tcpSocket.GetStream()
     ""; "-- Target: $fqdn / " + $tcpSocket.Client.RemoteEndPoint.Address.IPAddressToString
     $sslStream = New-Object -TypeName Net.Security.SslStream($tcpStream, $false)
+	Write-Output $sslStream
     $sslStream.AuthenticateAsClient($fqdn)  # If not valid, will display "remote certificate is invalid".
     $certinfo = New-Object -TypeName Security.Cryptography.X509Certificates.X509Certificate2(
         $sslStream.RemoteCertificate)
@@ -75,6 +76,7 @@ function CheckSSL($fqdn, $port=443)
 function init_connections(){
 	# test_isim_connections
 	# test_isim_connections_secure
-	# CheckSSL $PROPERTY_FILE.ENDPOINTS.SESSION
-	CheckSSL $PROPERTY_FILE.ISIM.ISIM_VA $PROPERTY_FILE.ISIM.ISIM_VA_PORT
+	
+	# CheckSSL $PROPERTY_FILE.ISIM.ISIM_VA $PROPERTY_FILE.ISIM.ISIM_VA_PORT
+	CheckSSL google.com.ar 443
 }
