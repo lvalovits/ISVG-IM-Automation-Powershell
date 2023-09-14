@@ -3,12 +3,13 @@ Import-Module $PSScriptRoot\utils_properties.psm1 -force
 Import-Module $PSScriptRoot\utils_logs.psm1 -force
 Import-Module $PSScriptRoot\utils_connections.psm1 -force
 
-exit
 
-function libs_init{
+function _init_{
 	[CmdletBinding()]
         param (
-			[switch]$SkipConnectionTest
+		$sd,
+		$s,	
+		[switch]$SkipConnectionTest
 		)
 	try{		
 		
@@ -16,54 +17,29 @@ function libs_init{
 		Write-Host -fore green "--- Starting initialization ---"
 		Write-Host
 
-		Write-Host -fore green "`tReading properties"
-		init_properties
+		if (-not $SkipTest_Properties.IsPresent){
+			Write-Host -fore green "`tReading properties"
+			init_properties
+		}
 
-		Write-Host -fore green "`tRuning on debug: $($Global:PROPERTY_FILE.LIB.DEBUG)"
 
-		init_logging
-		debugLog "info" "--- Starting initialization ---"
+		if (-not $SkipTest_Logging.IsPresent){
+			init_logging
+			write_log "info" "--- Starting initialization ---"
+			Write-Host -fore green "`tLog file: $($PROPERTY_FILE.LIB.LOG_FILE)"
+		}
 		
-		Write-Host -fore green "`tDebug log: $($GLOBAL:LOGFILE_DEBUG)"
-				
-		Write-Host -fore green "`tBuilding WSDL URLs"
-		build_WSDL
-		
-		if (! $SkipTest.IsPresent){
+		if (-not $SkipTest_Connections.IsPresent){
 			Write-Host -fore green "`tTesting connections"
-			Test_Connections
+			init_connections
 		}
 
 		Write-Host
 		Write-Host -fore green "--- Initialization completed ---"
 		Write-Host
 		
-		debugLog "info" "--- Initialization completed ---"
+		write_log "info" "--- Initialization completed ---"
 	}catch{
 		Write-Host -fore red "$($Error[0])"
 	}
-}
-
-
-function testConnections_Host(){
-	param (
-        $propValue,
-		$propName
-    )
-	try{
-		if ($null -ne $propValue){
-			ping -n 1 $propValue > $null
-			if ($LASTEXITCODE -eq 0){
-				Write-Host -fore green "`t`t${propName}: OK"
-			}else{
-				Throw "`t`t$($propName): Could not find host $($propValue)"
-			}
-		}else{
-			Write-Host -fore red "`t`t${propName}: Property missing"
-			Throw "Property missing"
-		}
-	}catch{
-		Write-Host -fore red "$($Error[0])"
-	}
-
 }

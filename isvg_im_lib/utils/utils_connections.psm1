@@ -1,82 +1,76 @@
 function test_isim_connections_secure(){
-		[CmdletBinding()]
-    param(
-        [Parameter()]
-        [string] $SCRIPT:ISIM_SESSION_ENDPOINT
-	)
 
-	if (-not ($ISIM_SESSION_ENDPOINT)){
-		$ISIM_SESSION_ENDPOINT = $PROPERTY_FILE.ENDPOINTS.SESSION
-	}
-
-	try{
-		if ($PROPERTY_FILE.ISIM.SSL){
-			
-			[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
-			[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-
+	Write-Warning "`t`tSSL Enabled	=	$($PROPERTY_FILE.ISIM.SSL)"
+	
+	if ($PROPERTY_FILE.ISIM.SSL){
+		if ($PROPERTY_FILE.ISIM.SSL_SKIP_VALIDATION){
+			[System.Net.ServicePointManager]::ServerCertificateValidationCallback	=	{$true}
 			Write-Warning "`t`tSSL Connection: BYPASSED"
+		}else{
+			[Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
+			CheckSSL -FQDN $PROPERTY_FILE.ISIM.HOST_VA -Port $PROPERTY_FILE.ISIM.PORT_VA
+			CheckSSL -FQDN $PROPERTY_FILE.ISIM.HOST_APP -Port $PROPERTY_FILE.ISIM.PORT_APP
 		}
-
-	}catch [System.Management.Automation.MethodInvocationException]{
-		Throw "``ttCould not establish trust relationship for the SSL/TLS secure channel"
-		Write-Host -fore red "$($Error[0])"
 	}
 }
 
 function test_isim_connections{
-	if ($(Test-Connection -Quiet -Count 1 -ComputerName $($PROPERTY_FILE.ISIM.ISIM_VA), $($PROPERTY_FILE.ISIM.ISIM_APP))){
-		Write-Warning "`t`tSSL Enabled = $($PROPERTY_FILE.ISIM.SSL)"
-		if ($PROPERTY_FILE.ISIM.SSL){
-			[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-			
-			if ($PROPERTY_FILE.ISIM.SKIP_SSL_VALIDATION){
-				[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
-				Write-Warning "`t`tSSL Connection: BYPASSED"
-			}
-		}
+	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.HOST_VA))){
+		Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.HOST_VA)"
 	}
-	$PROPERTY_FILE.ISIM.VERSION = (New-WebServiceProxy -Uri ${ISIM_SESSION_ENDPOINT} -ErrorAction STOP).getItimVersionInfo().version
-	New-WebServiceProxy::ServerCertificateValidationCallback.
+	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.HOST_APP))){
+		Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.HOST_APP)"
+	}
+	
 }
 
-# Usage: CheckSSL <fully-qualified-domain-name>
+# Usage: CheckSSL -FQDN <fully-qualified-domain-name> -Port <port number>
 # https://learn.microsoft.com/en-us/troubleshoot/azure/azure-monitor/log-analytics/ssl-connectivity-mma-windows-powershell
-function CheckSSL($fqdn, $port=443) 
-{
+function CheckSSL() {
+		[CmdletBinding()]
+	param(
+		[Parameter(Mandatory, Position=0)]
+		[String] $FQDN,
+		[Parameter(Mandatory, Position=1)]
+		[int] $Port
+	)
+	$SCRIPT:tcpSocket
+	$SCRIPT:tcpStream
+	$SCRIPT:sslStream
+	$SCRIPT:certinfo
+	$SCRIPT:result = $True
+
     try {
-        $tcpSocket = New-Object Net.Sockets.TcpClient($fqdn, $port)
+        $tcpSocket	=	New-Object Net.Sockets.TcpClient($FQDN, $Port)
     } catch {
-        Write-Warning "$($_.Exception.Message) / $fqdn"
-        break
+		$SCRIPT:result	=	$False
+		Write-Warning "Error: $($_.Exception.InnerException.Message)"
     }
-    $tcpStream = $tcpSocket.GetStream()
-    ""; "-- Target: $fqdn / " + $tcpSocket.Client.RemoteEndPoint.Address.IPAddressToString
-    $sslStream = New-Object -TypeName Net.Security.SslStream($tcpStream, $false)
-	Write-Output $sslStream
-    $sslStream.AuthenticateAsClient($fqdn)  # If not valid, will display "remote certificate is invalid".
-    $certinfo = New-Object -TypeName Security.Cryptography.X509Certificates.X509Certificate2(
-        $sslStream.RemoteCertificate)
 
-    $sslStream |
-        Select-Object |
-        Format-List -Property SslProtocol, CipherAlgorithm, HashAlgorithm, KeyExchangeAlgorithm,
-            IsAuthenticated, IsEncrypted, IsSigned, CheckCertRevocationStatus
-    $certinfo |
-        Format-List -Property Subject, Issuer, FriendlyName, NotBefore, NotAfter, Thumbprint
-    $certinfo.Extensions |
-        Where-Object -FilterScript { $_.Oid.FriendlyName -Like 'subject alt*' } |
-        ForEach-Object -Process { $_.Oid.FriendlyName; $_.Format($true) }
+	if ($result){
+		$tcpStream	=	$tcpSocket.GetStream()
+		""; "-- Target: $FQDN / " + $tcpSocket.Client.RemoteEndPoint.Address.IPAddressToString
+		$sslStream	=	New-Object -TypeName Net.Security.SslStream($tcpStream, $false)
+		
+		try{
+			$sslStream.AuthenticateAsClient($FQDN)   | Out-Null # If not valid, will display "remote certificate is invalid".
+			$certinfo	=	New-Object -TypeName Security.Cryptography.X509Certificates.X509Certificate2($sslStream.RemoteCertificate)
 
-    $tcpSocket.Close() 
+			$sslStream | Select-Object | Format-List -Property SslProtocol, CipherAlgorithm, HashAlgorithm, KeyExchangeAlgorithm, IsAuthenticated, IsEncrypted, IsSigned, CheckCertRevocationStatus
+			$certinfo | Format-List -Property Subject, Issuer, FriendlyName, NotBefore, NotAfter, Thumbprint
+			$certinfo.Extensions | Where-Object -FilterScript { $_.Oid.FriendlyName -Like 'subject alt*' } | ForEach-Object -Process { $_.Oid.FriendlyName; $_.Format($true) }
+			$tcpSocket.Close()
+		} catch {
+			$SCRIPT:result	=	$False
+			$tcpSocket.Close()
+			Write-Warning "Error: $($_.Exception.InnerException.Message)"
+		}
+	}
 }
 
 
 
 function init_connections(){
-	# test_isim_connections
-	# test_isim_connections_secure
-	
-	# CheckSSL $PROPERTY_FILE.ISIM.ISIM_VA $PROPERTY_FILE.ISIM.ISIM_VA_PORT
-	CheckSSL google.com.ar 443
+	test_isim_connections
+	test_isim_connections_secure
 }

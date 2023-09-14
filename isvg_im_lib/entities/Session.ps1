@@ -19,7 +19,7 @@ Class ISIM_Session{
 	$sessionID								=	$null
 	$clientSession							=	$null
 	$enforceChallengeResponse				=	$null
-	$locale = @{
+	$locale	=	@{
 		country								=	$null
 		variant								=	$null
 		language							=	$null

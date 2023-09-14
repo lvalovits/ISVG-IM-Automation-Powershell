@@ -20,13 +20,13 @@ function Copy-ISIMObjectNamespace {
 	    [string]$targetNS
     )    
 
-    $myTypeName = $obj.getType().Name.Split("[")[0];
+    $myTypeName	=	$obj.getType().Name.Split("[")[0];
 
     if( $obj.getType().BaseType.Name -eq "Array" ) {
-        $tmp_array = @();
+        $tmp_array	=	@();
         
         $obj | % {
-            $tmp1 = Copy-ISIMObjectNamespace $_ $targetNS;
+            $tmp1	=	Copy-ISIMObjectNamespace $_ $targetNS;
             $tmp_array += $tmp1;
         }
 
@@ -34,21 +34,21 @@ function Copy-ISIMObjectNamespace {
 
     } 
 
-    $newObj = New-Object ( $targetNS+"."+$myTypeName)
+    $newObj	=	New-Object ( $targetNS+"."+$myTypeName)
 
     $obj.psobject.Properties | % {
-        $pname = $_.Name
+        $pname	=	$_.Name
         if ( $_.TypeNameOfValue.StartsWith("System.") ) {
             if( $newObj.psobject.Properties.Item($pname) -ne $null ) {
-                $newObj.$pname = $_.Value
+                $newObj.$pname	=	$_.Value
             } else {
                 Write-Host -ForegroundColor Yellow "Property $pname Could not be set"
             }
         } else {
             if ( !$newObj.$pname ) {
-                 $newObj.$pname = New-Object ( $targetNS+"."+($_.TypeNameOfValue.Split(".")[-1].Split("[")[0]))
+                 $newObj.$pname	=	New-Object ( $targetNS+"."+($_.TypeNameOfValue.Split(".")[-1].Split("[")[0]))
             }
-            $newObj.$pname = Copy-ISIMObjectNamespace $obj.$pname $targetNS
+            $newObj.$pname	=	Copy-ISIMObjectNamespace $obj.$pname $targetNS
         }
     }
     return $newObj
@@ -73,18 +73,18 @@ function Convert-2WSAttr {
     )
     process {
         if ( $inAttr -NE $null ) {
-            $wsattr_array = $inAttr;
+            $wsattr_array	=	$inAttr;
 
             $hash.GetEnumerator() | ForEach{
                 if ( $null -ne $_.value ){
-                    $prop_name = $_.name;
-                    $prop_value = $_.value;
+                    $prop_name	=	$_.name;
+                    $prop_value	=	$_.value;
 
                     if ( ( $wsattr_array | Where-Object { $_.name -eq $prop_name } ).Count -eq 1 ) {
-                        ( $wsattr_array | Where-Object { $_.name -eq $prop_name } ).values = $prop_value
+                        ( $wsattr_array | Where-Object { $_.name -eq $prop_name } ).values	=	$prop_value
                     } else {
-                        $wsattr = New-Object ($namespace+".WSAttribute")
-                        $wsattr.name = $prop_name
+                        $wsattr	=	New-Object ($namespace+".WSAttribute")
+                        $wsattr.name	=	$prop_name
                         $wsattr.values +=  $prop_value
                         $wsattr_array += $wsattr
                     }
@@ -92,11 +92,11 @@ function Convert-2WSAttr {
             }
 
         } else {
-            $wsattr_array = @();
+            $wsattr_array	=	@();
             $hash.GetEnumerator() | ForEach{
                 if ( $null -ne $_.value ){
-                    $wsattr = New-Object ($namespace+".WSAttribute")
-                    $wsattr.name = $_.name
+                    $wsattr	=	New-Object ($namespace+".WSAttribute")
+                    $wsattr.name	=	$_.name
                     $wsattr.values +=  $_.value
                     $wsattr_array += $wsattr
                 }
@@ -123,16 +123,16 @@ function Convert-2WSObject{
         [psObject]$wsStub
     )
 
-    $isim_object_props          =   $isim_object | Get-Member | Where-Object{ ( $_.membertype -eq "Property" )}
+    $isim_object_props         	=	  $isim_object | Get-Member | Where-Object{ ( $_.membertype -eq "Property" )}
 
     $isim_object_props | ForEach-Object {
         if (( $_.Name.ToLower() -ne "attributes" ) -and ( $_.Name.ToLower() -ne "raw" )){
             if ( $null -ne $isim_object.$($_.name) ){
-                $wsStub.$($_.name)  =   ($isim_object.$($_.name)).Clone()
+                $wsStub.$($_.name) 	=	  ($isim_object.$($_.name)).Clone()
             }
         }
         if ( $_.Name.ToLower() -eq "attributes" ) {
-            $wsStub.attributes  =   Convert-2WSAttr -hash $isim_object.attributes -namespace $wsStub.GetType().Namespace
+            $wsStub.attributes 	=	  Convert-2WSAttr -hash $isim_object.attributes -namespace $wsStub.GetType().Namespace
         }
     }
 

@@ -1,6 +1,6 @@
 #
 #	usage:
-#		$role_proxy = [ISIM_Role_Proxy]::getProxy()
+#		$role_proxy	=	[ISIM_Role_Proxy]::getProxy()
 #		$role_proxy.init() : void
 #		$role_proxy.searchRoles( <raw_session> , <filter> ) : ISIM_Role[]
 #		$role_proxy.createStaticRole ( <raw_session> , <raw_container> , <raw_role> ) : ISIM_Role
@@ -31,12 +31,12 @@ class ISIM_Role_Proxy{
 
 		try{
 			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
-				$exceptionMessage = "Session not found."
+				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
 
-			$this.proxy = New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-			$this.namespace = $this.proxy.GetType().Namespace
+			$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
+			$this.namespace	=	$this.proxy.GetType().Namespace
 		}
 		catch {
 			$exceptionMessage	=	"Could not create proxy."
@@ -62,10 +62,10 @@ class ISIM_Role_Proxy{
 				Throw $exceptionMessage
 			}
 
-			$returnObject = New-Object $($this.namespace+".WSRole")
+			$returnObject	=	New-Object $($this.namespace+".WSRole")
 
 		}catch{
-			if ( $null -eq $exceptionMessage) { $exceptionMessage = "Unhandled error" }
+			if ( $null -eq $exceptionMessage) { $exceptionMessage	=	"Unhandled error" }
 			Write-Host -fore red "$($subject): $exceptionMessage"
 			debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
 			debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
@@ -87,7 +87,7 @@ class ISIM_Role_Proxy{
 			
 				$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
 				
-				$wsReturn = $this.proxy.searchRoles($wsSession, $filter)
+				$wsReturn	=	$this.proxy.searchRoles($wsSession, $filter)
 		
 				if($wsReturn.count -gt 0) {
 					$wsReturn | ForEach-Object{
@@ -105,7 +105,7 @@ class ISIM_Role_Proxy{
 			}
 		}else{
 			try{
-				$exceptionMessage = "Proxy not found."
+				$exceptionMessage	=	"Proxy not found."
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
@@ -130,7 +130,7 @@ class ISIM_Role_Proxy{
 				$wsSession		=	Copy-ISIMObjectNamespace $raw_session $this.namespace
 				$wsContainer	=	Copy-ISIMObjectNamespace $raw_container $this.namespace
 				
-				$wsReturn = $this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
+				$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
 		
 				if($null -ne $wsReturn) {
 					$returnObject		=	[ISIM_Role]::new($wsReturn)
@@ -145,7 +145,7 @@ class ISIM_Role_Proxy{
 			}
 		}else{
 			try{
-				$exceptionMessage = "Proxy not found."
+				$exceptionMessage	=	"Proxy not found."
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"

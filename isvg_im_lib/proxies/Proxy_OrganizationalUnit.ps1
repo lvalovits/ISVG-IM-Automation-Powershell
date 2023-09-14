@@ -1,6 +1,6 @@
 #
 #	usage:
-#		$orgUnit_proxy = [ISIM_OrgUnit_Proxy]::getProxy()
+#		$orgUnit_proxy	=	[ISIM_OrgUnit_Proxy]::getProxy()
 #		$orgUnit_proxy.init() : void
 #		$orgUnit_proxy.getOrganization(<raw_session>) : ISIM_OrgUnit
 #		$orgUnit_proxy.getOrganizationSubTree(<raw_session> , <raw_organization>) : ISIM_OrgUnit
@@ -29,12 +29,12 @@ class ISIM_OrgUnit_Proxy{
 
 		try{
 			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
-				$exceptionMessage = "Session not found."
+				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
 
-			$this.proxy = New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-			$this.namespace = $this.proxy.GetType().Namespace
+			$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
+			$this.namespace	=	$this.proxy.GetType().Namespace
 		}
 		catch {
 			$exceptionMessage	=	"Could not create proxy."
@@ -59,10 +59,10 @@ class ISIM_OrgUnit_Proxy{
 				Throw $exceptionMessage
 			}
 
-			$returnObject = New-Object $($this.namespace+".WSOrganizationalContainer")
+			$returnObject	=	New-Object $($this.namespace+".WSOrganizationalContainer")
 
 		}catch{
-			if ( $null -eq $exceptionMessage) { $exceptionMessage = "Unhandled error" }
+			if ( $null -eq $exceptionMessage) { $exceptionMessage	=	"Unhandled error" }
 			Write-Host -fore red "$($subject): $exceptionMessage"
 			debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
 			debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
@@ -100,7 +100,7 @@ class ISIM_OrgUnit_Proxy{
 			}
 		}else{
 			try{
-				$exceptionMessage = "Proxy not found."
+				$exceptionMessage	=	"Proxy not found."
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
@@ -140,7 +140,7 @@ class ISIM_OrgUnit_Proxy{
 			}
 		}else{
 			try{
-				$exceptionMessage = "Proxy not found."
+				$exceptionMessage	=	"Proxy not found."
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"

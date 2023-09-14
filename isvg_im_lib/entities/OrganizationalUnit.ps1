@@ -11,8 +11,8 @@ Class ISIM_Container{
 	[string] $itimDN
 	[string] $parentDN
 	[string] $supervisorDN
-	$children = @()
-	$attributes = @{
+	$children	=	@()
+	$attributes	=	@{
 		erglobalid				=	$null
 		erorgstatus				=	$null
 		objectclass				=	$null

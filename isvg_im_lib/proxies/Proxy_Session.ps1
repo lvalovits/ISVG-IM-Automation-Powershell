@@ -1,6 +1,6 @@
 #
 #	usage:
-#		$session_proxy = [ISIM_Session_Proxy]::getProxy()
+#		$session_proxy	=	[ISIM_Session_Proxy]::getProxy()
 #		$session_proxy.init() : void
 #		$session_proxy.login(<creds>) : void
 #		$session_proxy.logout(<raw_session>) : void
@@ -27,8 +27,8 @@ class ISIM_Session_Proxy{
 
 		try{
 			[ISIM_Session]::GetSession().clean()
-			$this.proxy_session = New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-			$this.namespace_session = $this.proxy_session.GetType().Namespace
+			$this.proxy_session	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
+			$this.namespace_session	=	$this.proxy_session.GetType().Namespace
 		}
 		catch {
 			$exceptionMessage	=	"Could not create proxy."
@@ -50,7 +50,7 @@ class ISIM_Session_Proxy{
 				$isim_principal		=	$Credential.GetNetworkCredential().username
 				$isim_seceret		=	$Credential.GetNetworkCredential().password
 				
-				$wsReturn = $this.proxy_session.login( $isim_principal, $isim_seceret )
+				$wsReturn	=	$this.proxy_session.login( $isim_principal, $isim_seceret )
 		
 				$Session								=	[ISIM_Session]::GetSession()
 					$Session.raw						=	$wsReturn
@@ -120,7 +120,7 @@ class ISIM_Session_Proxy{
 				Write-Host
 
 			}catch{
-				$exceptionMessage = "Error loging out."
+				$exceptionMessage	=	"Error loging out."
 				Write-Host -fore red "$($subject): $exceptionMessage"
 				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
 				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
@@ -128,7 +128,7 @@ class ISIM_Session_Proxy{
 				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
-			$exceptionMessage = "Proxy not found."
+			$exceptionMessage	=	"Proxy not found."
 			try{
 				Throw $exceptionMessage
 			}catch{

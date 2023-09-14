@@ -19,11 +19,12 @@ Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.psm1 -force
 . ".\isvg_im_lib\proxies\Proxy_Role.ps1"
 . ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
 
-init_properties
-init_logging
-init_connections
+# init_properties
+# init_logging
+# init_connections
+_init_
 exit
-
+$PROPERTY_FILE.ISIM.VERSION	=	(New-WebServiceProxy -Uri ${ISIM_SESSION_ENDPOINT} -ErrorAction STOP).getItimVersionInfo().version
 isim_ws_init
 
 function Test-Connection(){
@@ -103,7 +104,7 @@ function Test-CreateStaticRoles(){
 	$ws_new_staticRole					=	$role_proxy.getStub()
 	Convert-2WSObject $isim_new_staticRole $ws_new_staticRole
 
-	$isim_role = $role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $new_staticRole_ws)
+	$isim_role	=	$role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $new_staticRole_ws)
 	Write-Host "Static role created:	" $isim_role.name
 
 	Start-Sleep -Seconds 5
@@ -118,7 +119,7 @@ function Test-CreateStaticRoles(){
 	$ws_new_staticRole_2				=	$role_proxy.getStub()
 	Convert-2WSObject $isim_role $ws_new_staticRole_2
 
-	$isim_role = $role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $ws_new_staticRole_2)
+	$isim_role	=	$role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $ws_new_staticRole_2)
 	Write-Host "Static role created:	" $isim_role.name
 }
 
@@ -137,16 +138,16 @@ Test-SearchOrganizationalStructure
 exit
 
 
-# $session_wsdl = "https://172.25.230.154:9082/itim/services/WSSessionService?wsdl"
-# $role_wsdl = "https://172.25.230.154:9082/itim/services/WSRoleServiceService?wsdl"
-$ou_wsdl = "https://172.25.230.154:9082/itim/services/WSOrganizationalContainerServiceService?wsdl"
+# $session_wsdl	=	"https://172.25.230.154:9082/itim/services/WSSessionService?wsdl"
+# $role_wsdl	=	"https://172.25.230.154:9082/itim/services/WSRoleServiceService?wsdl"
+$ou_wsdl	=	"https://172.25.230.154:9082/itim/services/WSOrganizationalContainerServiceService?wsdl"
 
-# $session_proxy = New-WebServiceProxy -Uri $session_wsdl -ErrorAction stop
-# $role_proxy = New-WebServiceProxy -Uri $role_wsdl -ErrorAction stop
-$ou_ws_proxy = New-WebServiceProxy -Uri $ou_wsdl -ErrorAction stop
+# $session_proxy	=	New-WebServiceProxy -Uri $session_wsdl -ErrorAction stop
+# $role_proxy	=	New-WebServiceProxy -Uri $role_wsdl -ErrorAction stop
+$ou_ws_proxy	=	New-WebServiceProxy -Uri $ou_wsdl -ErrorAction stop
 
-# $role_namespace = $role_proxy.GetType().Namespace
-$ou_namespace = $ou_ws_proxy.GetType().Namespace
+# $role_namespace	=	$role_proxy.GetType().Namespace
+$ou_namespace	=	$ou_ws_proxy.GetType().Namespace
 
 $raw_session	=	[ISIM_Session]::GetSession().raw
 # $raw_ou			=	$subtree.children[0].raw
@@ -155,17 +156,17 @@ $raw_session	=	[ISIM_Session]::GetSession().raw
 # $wsContainer_roles	=	Copy-ISIMObjectNamespace $raw_ou $role_namespace -ErrorAction SilentlyContinue
 $wsSession_ou	=	Copy-ISIMObjectNamespace $raw_session $ou_namespace
 
-# $roles = $role_proxy.searchRoles($wsSession_roles, "(errolename=*)")
-$organizations = $ou_ws_proxy.getOrganizations($wsSession_ou)
-$ous = $ou_ws_proxy.getOrganizationSubTree($wsSession_ou, $organizations[0])
+# $roles	=	$role_proxy.searchRoles($wsSession_roles, "(errolename=*)")
+$organizations	=	$ou_ws_proxy.getOrganizations($wsSession_ou)
+$ous	=	$ou_ws_proxy.getOrganizationSubTree($wsSession_ou, $organizations[0])
 
 # $raw_static_role				=	New-Object $($role_namespace+".WSRole")
 # $raw_static_role.name			=	"WS v2 Static Test 10"
 # # $raw_static_role.description	=	"Description for WS v2 Static Test 4"
 
-# $Attributes = @{"errolenamse"=$raw_static_role.name}
-# $wsattr = Convert-2WSAttr -hash $Attributes -namespace $role_namespace
-# $raw_static_role.attributes = $wsattr;
+# $Attributes	=	@{"errolenamse"=$raw_static_role.name}
+# $wsattr	=	Convert-2WSAttr -hash $Attributes -namespace $role_namespace
+# $raw_static_role.attributes	=	$wsattr;
 
 # $new_role_isim	=	$roles[5]
 
@@ -180,15 +181,15 @@ $ous = $ou_ws_proxy.getOrganizationSubTree($wsSession_ou, $organizations[0])
 # $new_role_ws	=	New-Object $($new_role_isim.raw.getType().namespace+".WSRole")
 # Convert-2WSObject $new_role_isim $new_role_ws
 
-# $r = $role_proxy.createStaticRole($wsSession_roles, $wsContainer_roles, $new_role_ws)
+# $r	=	$role_proxy.createStaticRole($wsSession_roles, $wsContainer_roles, $new_role_ws)
 
 
 # $raw_dinamyc_role				=	New-Object $($role_namespace+".WSRole")
 # $raw_dinamyc_role.name			=	"WS v2 Dynamic Test 5"
 
-# $Attributes = @{"erscope"="1";"erjavascript"="(cn=not a real filter)"}
-# $wsattr = Convert-2WSAttr -hash $Attributes -namespace $role_namespace
-# $raw_dinamyc_role.attributes = $wsattr;
+# $Attributes	=	@{"erscope"="1";"erjavascript"="(cn=not a real filter)"}
+# $wsattr	=	Convert-2WSAttr -hash $Attributes -namespace $role_namespace
+# $raw_dinamyc_role.attributes	=	$wsattr;
 
 # $role_proxy.createDynamicRole($wsSession_roles, $wsContainer_roles, $raw_dinamyc_role, $null, $false)
 

@@ -11,7 +11,7 @@ class ISIM_Role:ICloneable{
 	[string]$description
 	[string]$itimDN
 	
-	$attributes = @{
+	$attributes	=	@{
 		erglobalid				=	$null
 		errolename				=	$null
 		erscope					=	$null
@@ -72,13 +72,13 @@ class ISIM_Role:ICloneable{
 
 	#TODO: add a way to clone from an ISIM_OBJECT to another
 	hidden [Object] Clone () {
-		$newObject = [ISIM_Role]::New()
+		$newObject	=	[ISIM_Role]::New()
 		foreach ($Property in ($this | Get-Member -MemberType Property))
 		{
 			if($Property.Name -eq "Attrbutes"){
-				$newObject.$($Property.Name) = $this.$($Property.Name).Clone()
+				$newObject.$($Property.Name)	=	$this.$($Property.Name).Clone()
 			}else{
-				$newObject.$($Property.Name) = $this.$($Property.Name)
+				$newObject.$($Property.Name)	=	$this.$($Property.Name)
 			}
 		} # foreach
 		return $newObject
