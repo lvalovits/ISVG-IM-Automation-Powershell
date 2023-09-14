@@ -10,15 +10,15 @@ Import-Module $PSScriptRoot\isvg_im_lib\utils\isvg_im_lib_init.psm1 -force
 <# Import Entity #>
 # . ".\isvg_im_lib\entities\Session.psm1"
 Import-Module $PSScriptRoot\isvg_im_lib\entities\Session.psm1 -force
-. ".\isvg_im_lib\entities\Role.ps1"
-. ".\isvg_im_lib\entities\OrganizationalUnit.ps1"
+# . ".\isvg_im_lib\entities\Role.ps1"
+# . ".\isvg_im_lib\entities\OrganizationalUnit.ps1"
 
 <# Import proxies section #>
 . ".\isvg_im_lib\proxies\Proxy_Session.ps1"
-. ".\isvg_im_lib\proxies\Proxy_Role.ps1"
-. ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
+# . ".\isvg_im_lib\proxies\Proxy_Role.ps1"
+# . ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
 
-_init_ -SkipTest_Connections
+_init_ #-SkipTest_Connections
 
 function Test-Connection(){
 	$session_proxy	=	[ISIM_Session_Proxy]::getProxy()
@@ -118,8 +118,8 @@ function Test-CreateStaticRoles(){
 }
 
 Test-Connection
-Test-SearchRoles
-Test-SearchOrganizationalStructure
+# Test-SearchRoles
+# Test-SearchOrganizationalStructure
 
 #TODO:	Test-SearchServices
 #TODO:	Test-SearchPerson

@@ -61,7 +61,7 @@ function set_logPath_as_path{
 }
 
 function build_endpoints(){
-	$PROPERTY_FILE.ISIM.URL	=	"https://" + $PROPERTY_FILE.ISIM.HOST_APP + ":" + $PROPERTY_FILE.ISIM.HOST_APP_PORT
+	$PROPERTY_FILE.ISIM.URL	=	"https://" + $PROPERTY_FILE.ISIM.HOST_APP + ":" + $PROPERTY_FILE.ISIM._APP_PORT
 	
 	$PROPERTY_FILE.WSDL_FILES.keys | ForEach-Object {
 		if ($null -ne $PROPERTY_FILE.WSDL_FILES[$_]){
