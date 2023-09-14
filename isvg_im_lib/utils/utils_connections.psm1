@@ -76,5 +76,5 @@ function init_connections(){
 	# test_isim_connections
 	# test_isim_connections_secure
 	# CheckSSL $PROPERTY_FILE.ENDPOINTS.SESSION
-	CheckSSL $PROPERTY_FILE.ISIM.ISIM_VA
+	CheckSSL $PROPERTY_FILE.ISIM.ISIM_VA $PROPERTY_FILE.ISIM.ISIM_VA_PORT
 }
