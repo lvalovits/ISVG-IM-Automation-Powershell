@@ -20,7 +20,8 @@ Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.psm1 -force
 . ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
 
 init_properties
-init_logging
+# init_logging
+# test_connections_secure #-ISIM_SESSION_WSDL "1234"
 exit
 
 isim_ws_init

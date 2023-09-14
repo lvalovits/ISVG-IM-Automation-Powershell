@@ -30,6 +30,14 @@ function set_debug_as_bool{
 	}
 }
 
+function set_ssl_as_bool{
+	try {
+		$Global:PROPERTY_FILE.ISIM.SSL = [System.Convert]::ToBoolean($Global:PROPERTY_FILE.ISIM.SSL)
+	} catch [FormatException] {
+		$Global:PROPERTY_FILE.ISIM.SSL = $false
+	}
+}
+
 function set_logPath_as_path{
 	if (Test-Path -PathType Container -Path $PROPERTY_FILE.LIB.LOG_PATH){
 		if ([System.IO.Path]::IsPathRooted($PROPERTY_FILE.LIB.LOG_PATH)){
@@ -42,8 +50,23 @@ function set_logPath_as_path{
 	}
 }
 
+function build_urls(){
+	$GLOBAL:PROPERTY_FILE.ISIM.URL				=	"https://" + $GLOBAL:PROPERTY_FILE.ISIM.ISIM_APP + ":" + $GLOBAL:PROPERTY_FILE.ISIM.ISIM_APP_PORT
+	
+	$GLOBAL:PROPERTY_FILE.WSDL.keys | ForEach-Object {
+		if ($null -ne $GLOBAL:PROPERTY_FILE.WSDL[$_]){
+			$url =  "$($GLOBAL:PROPERTY_FILE.ISIM.URL)$($GLOBAL:PROPERTY_FILE.WSDL[$_])"
+			Write-Output $GLOBAL:PROPERTY_FILE.WSDL[$_]
+			Write-Output $url
+			$GLOBAL:PROPERTY_FILE.WSDL.URL[$_] = $url
+		}
+	}
+}
+
 function init_properties{
 	read_property_files
 	set_debug_as_bool
+	set_ssl_as_bool
 	set_logPath_as_path
+	build_urls
 }

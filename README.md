@@ -17,7 +17,11 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs
 6. ldap objects
 7. import-export operation
 8. replace ISIM by ISVG IM
-9. init.ps: SSL checker
+9. utils_connections.ps: SSL checker
+		- ServerCertificateValidationCallback = true
+		- This property allows to run non-secure
+		- Purpose:
+		- If SSL not trusted, bypass it
 10. verbose option
 
 ##### Functionalities
