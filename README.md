@@ -1,5 +1,5 @@
 # ISVG-IM-Powershell
-IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs
+IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for automation
 
 ![Static Badge](https://img.shields.io/badge/status-on%20development-yellow)
 ![GitHub top language](https://img.shields.io/github/languages/top/lvalovits/ISVG-IM-Powershell?logo=powershell)

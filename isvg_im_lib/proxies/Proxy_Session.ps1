@@ -17,7 +17,7 @@ class ISIM_Session_Proxy{
     }
 	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$GLOBAL:ISIM_WSDL_SESSION
+	[string]$proxy_wsdl		=	$PROPERTY_FILE.ENDPOINTS.SESSION
 	$proxy_session			=	$null
 	$namespace_session		=	$null
 
@@ -33,10 +33,10 @@ class ISIM_Session_Proxy{
 		catch {
 			$exceptionMessage	=	"Could not create proxy."
 			Write-Host -fore red "$($subject): $exceptionMessage"
-			debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-			debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 		}
 	}
 
@@ -74,26 +74,21 @@ class ISIM_Session_Proxy{
 
 				$exceptionMessage	=	"Authentication error."
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			$exceptionMessage	=	"Proxy not found."
 			try{
-				# Write-Error "" -ErrorAction Stop
 				Throw $exceptionMessage
 			}catch{
-				# Write-Host -fore red "$($subject): $exceptionMessage"
-				# debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				# debugLog "error" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-				
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}	
 	}
@@ -122,10 +117,10 @@ class ISIM_Session_Proxy{
 			}catch{
 				$exceptionMessage	=	"Error loging out."
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			$exceptionMessage	=	"Proxy not found."
@@ -133,10 +128,10 @@ class ISIM_Session_Proxy{
 				Throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}		
 	}

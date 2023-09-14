@@ -41,10 +41,10 @@ class ISIM_Role_Proxy{
 		catch {
 			$exceptionMessage	=	"Could not create proxy."
 			Write-Host -fore red "$($subject): $exceptionMessage"
-			debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-			debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 		}
 	}
 
@@ -67,10 +67,10 @@ class ISIM_Role_Proxy{
 		}catch{
 			if ( $null -eq $exceptionMessage) { $exceptionMessage	=	"Unhandled error" }
 			Write-Host -fore red "$($subject): $exceptionMessage"
-			debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-			debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 		}
 		return $returnObject
 	}
@@ -98,10 +98,10 @@ class ISIM_Role_Proxy{
 			}catch{
 				$exceptionMessage	=	"Error retrieving roles."
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			try{
@@ -109,10 +109,10 @@ class ISIM_Role_Proxy{
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}
 		return $returnArray
@@ -138,10 +138,10 @@ class ISIM_Role_Proxy{
 			}catch{
 				$exceptionMessage	=	"Error creating role"
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			try{
@@ -149,10 +149,10 @@ class ISIM_Role_Proxy{
 				throw $exceptionMessage
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
-				debugLog "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				debugLog "trace" "$($subject):	++	Exception:	$($PSItem)"
-				debugLog "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				debugLog "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}
 		return $returnObject

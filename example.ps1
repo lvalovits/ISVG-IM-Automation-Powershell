@@ -4,13 +4,12 @@
 # 	philipp1184:	for his great contribution with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184/isim-powershell
 #	cazdlt:			their pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
 
-<# Import functions section #>
-#Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils.ps1 -force
-#Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils_ws.ps1 -force
-Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.psm1 -force
+<# Import utils modules #>
+Import-Module $PSScriptRoot\isvg_im_lib\utils\isvg_im_lib_init.psm1 -force
 
 <# Import Entity #>
-. ".\isvg_im_lib\entities\Session.ps1"
+# . ".\isvg_im_lib\entities\Session.psm1"
+Import-Module $PSScriptRoot\isvg_im_lib\entities\Session.psm1 -force
 . ".\isvg_im_lib\entities\Role.ps1"
 . ".\isvg_im_lib\entities\OrganizationalUnit.ps1"
 
@@ -19,13 +18,7 @@ Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.psm1 -force
 . ".\isvg_im_lib\proxies\Proxy_Role.ps1"
 . ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
 
-# init_properties
-# init_logging
-# init_connections
-_init_
-exit
-$PROPERTY_FILE.ISIM.VERSION	=	(New-WebServiceProxy -Uri ${ISIM_SESSION_ENDPOINT} -ErrorAction STOP).getItimVersionInfo().version
-isim_ws_init
+_init_ -SkipTest_Connections
 
 function Test-Connection(){
 	$session_proxy	=	[ISIM_Session_Proxy]::getProxy()
@@ -47,6 +40,7 @@ function Test-Connection(){
 			Write-Host -ForegroundColor green 'Session object is a singleton. You can access it through [ISIM_Session]::GetSession()'
 		}
 	}
+
 	Write-Host
 }
 

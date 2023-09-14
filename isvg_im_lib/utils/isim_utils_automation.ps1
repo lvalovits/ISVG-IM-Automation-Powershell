@@ -19,7 +19,7 @@ function seekAndDestroy_roles{
 
 	)
 	
-	debugLog("seekAndDestroy_roles:	+ Deleting Roles using filter $filter")
+	write_log("seekAndDestroy_roles:	+ Deleting Roles using filter $filter")
 	
 	$session	=	getSession
 	$RoleClient	=	[ISIM_RoleClient]::getClient()
@@ -37,7 +37,7 @@ function seekAndDestroy_roles{
 			$i++
 			$CurrentItem++
 
-			debugLog("seekAndDestroy_roles:	++ ($i/$totalItems) Deleting role name: $($_.getName())")
+			write_log("seekAndDestroy_roles:	++ ($i/$totalItems) Deleting role name: $($_.getName())")
 			
 			$PercentComplete	=	[int](($CurrentItem / $TotalItems) * 100)
 			
@@ -113,7 +113,7 @@ function getSessionAdmin{
 	$session	=	$sessionClient.GetSession()
 	
 	if (-Not $session.exist){
-		debugLog "getSessionAdmin:	+ Login user 'admin'"
+		write_log "getSessionAdmin:	+ Login user 'admin'"
 		$sessionClient.login("itim manager", "Ninguno123!")
 	}
 
@@ -126,7 +126,7 @@ function getSession{
 	$session	=	$sessionClient.GetSession()
 
 	if (-Not $session.exist){
-		debugLog "getSession:	+ Login user $($GLOBAL:ISIM_WS_PROPS['ISIM_PRINCIPAL'])"
+		write_log "getSession:	+ Login user $($GLOBAL:ISIM_WS_PROPS['ISIM_PRINCIPAL'])"
 		$sessionClient.login($GLOBAL:ISIM_WS_PROPS['ISIM_PRINCIPAL'], $GLOBAL:ISIM_WS_PROPS['ISIM_SECRET'])
 	}
 
@@ -180,7 +180,7 @@ function newDynamicRole{
 	
 	$roleClient	=	[ISIM_RoleClient]::getClient()
 	
-	debugLog "newDynamicRole:	+ Creating role $($role.name)"
+	write_log "newDynamicRole:	+ Creating role $($role.name)"
 	$newRole_requestID	=	$roleClient.createRole($session, $role, $container)
 
 	return $newRole_requestID
