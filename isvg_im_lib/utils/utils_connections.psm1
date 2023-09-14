@@ -15,15 +15,47 @@ function test_isim_connections_secure(){
 }
 
 function test_isim_connections{
-	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.VA_HOST))){
-		# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
-		write_log error "Connection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
-	}
-	if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.APP_HOST))){
-		# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
-		write_log error "Connection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
+	if (-not $PROPERTY_FILE.LIB.DEPRECATED_TESTCONNECTION){
+		if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.VA_HOST))){
+			# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
+			write_log error "Connection error to $($PROPERTY_FILE.ISIM.VA_HOST)"
+		}
+		if (-not (Test-Connection -Quiet -Count 1 $($PROPERTY_FILE.ISIM.APP_HOST))){
+			# Write-Error "`t`tConnection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
+			write_log error "Connection error to $($PROPERTY_FILE.ISIM.APP_HOST)"
+		}
+	}else{
+		write_log info "Using deprecated test connection method"
+		test_isim_connections_deprecated $($PROPERTY_FILE.ISIM.VA_HOST) "ISVG IM VA"
+		test_isim_connections_deprecated $($PROPERTY_FILE.ISIM.App_HOST) "ISVG IM APP"
 	}
 	
+	
+}
+
+# keep this method to avoid user autentication when "Test-Connection" is called
+function test_isim_connections_deprecated(){
+	param (
+        $propValue,
+		$propName
+    )
+	try{
+		if ($null -ne $propValue){
+			$ping_return = ping -n 1 $propValue
+			
+			if (-not (($ping_return | Where-Object {$_ -match "Request timed out" -or $_ -match "Destination host unreachable"}) -gt 0)){
+				Write-Host -fore green "`t`t${propName}: OK"
+			}else{
+				Throw "`t`t$($propName): Could not find host $($propValue)"
+			}
+		}else{
+			Write-Host -fore red "`t`t${propName}: Property missing"
+			Throw "Property missing"
+		}
+	}catch{
+		Write-Host -fore red "$($Error[0])"
+	}
+
 }
 
 # Usage: CheckSSL -FQDN <fully-qualified-domain-name> -Port <port number>
