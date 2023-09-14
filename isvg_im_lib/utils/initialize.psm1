@@ -1,31 +1,7 @@
-$GLOBAL:PROPERTY_FILE_PATH = @{
-	ISIM		=	Convert-Path "$PSScriptRoot\..\..\isim.properties"
-	LIB			=	Convert-Path "$PSScriptRoot\..\properties\lib.propertdies"
-	XML_REQUEST	=	Convert-Path "$PSScriptRoot\..\properties\requests.properties"
-	WSDL		=	Convert-Path "$PSScriptRoot\..\properties\wsdl.properties"
-}
+Write-Output "Importing properties module..."
+Import-Module $PSScriptRoot\utils_properties.psm1 -force
+Import-Module $PSScriptRoot\utils_logs.psm1 -force
 
-$GLOBAL:PROPERTY_FILE = @{
-	ISIM		=	""
-	LIB			=	""
-	XML_REQUEST	=	""
-	WSDL		=	""
-}
-
-function set_properties{
-		
-	#Check property files. If file does not exist, throw exception
-	try{
-		$PROPERTY_FILE_PATH.keys | ForEach-Object {
-			$GLOBAL:PROPERTY_FILE[$_] = ConvertFrom-StringData (Get-Content $PROPERTY_FILE_PATH[$_] -raw)
-		}
-		
-	}catch{
-		Write-Host -fore red "$($Error[0])"
-		Write-Host -fore red "`t$($PSItem.InvocationInfo.Scriptname.toString().split("\")[-1]): Error in code line $($PSItem.InvocationInfo.ScriptLineNumber)."
-	}
-
-}
 exit
 
 function libs_init{
@@ -40,12 +16,11 @@ function libs_init{
 		Write-Host
 
 		Write-Host -fore green "`tReading properties"
-		read_Properties
-		
-		isDebugRun
-		Write-Host -fore green "`tRuning on debug: $($Global:ISIM_WS_PROPS['DEBUG'])"
+		init_properties
 
-		setLogFiles
+		Write-Host -fore green "`tRuning on debug: $($Global:PROPERTY_FILE.LIB.DEBUG)"
+
+		init_logging
 		debugLog "info" "--- Starting initialization ---"
 		
 		Write-Host -fore green "`tDebug log: $($GLOBAL:LOGFILE_DEBUG)"
@@ -196,48 +171,8 @@ function readDataFromCSV{
 	return Import-Csv $file -Delimiter $delimeter
 }
 
-function isDebugRun(){
-	try {
-		$Global:ISIM_WS_PROPS['DEBUG'] = [System.Convert]::ToBoolean($Global:ISIM_WS_PROPS['DEBUG'])
-	} catch [FormatException] {
-		$Global:ISIM_WS_PROPS['DEBUG'] = $false
-	}
-}
 
-function timeStamp() { (Get-Date).toString("yyyy.MM.dd-HH.mm.ss") }
 
-function debugLog(){
-	[CmdletBinding()]
-        param (
-			[Parameter(Mandatory, position=0)]
-			[ValidateSet(
-				"info", "error", "warning", "debug", "trace"
-			)]
-            $cat,
-			[Parameter(Mandatory, position=1)]
-			[string]	$msg
-		)
 
-	$logFile = $GLOBAL:LOGFILE_DEBUG
-	# $Stamp = (Get-Date).toString("yyyy/MM/dd HH:mm:ss")
-	$LogMessage = "$(timeStamp) - " + "[" + $cat.ToUpper() + "]" + "	" + $msg
-	
-	Add-content $LogFile -value $LogMessage
-	
-	if ($Global:ISIM_WS_PROPS['DEBUG']){
-		Write-host -fore Yellow "DEBUG:	$LogMessage"
-	}
-	
-}
 
-function setLogFiles(){
-	# $logStamp = (Get-Date).toString("yyyy.MM.dd-HH.mm.ss")
 
-	$logPath_debug = $Global:ISIM_WS_PROPS['LOGPATH_DEBUG']
-	# $logFile = $logPath_debug + "/" + $logStamp + "-" + "debugLog" + ".log"
-	$logFile = $logPath_debug + "/" + $(timeStamp) + "-" + "debugLog" + ".log"
-
-	$GLOBAL:LOGFILE_DEBUG=$logFile
-
-	debugLog "info" "--- Debug file created ---"
-}

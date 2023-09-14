@@ -7,7 +7,7 @@
 <# Import functions section #>
 #Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils.ps1 -force
 #Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils_ws.ps1 -force
-Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.ps1 -force
+Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.psm1 -force
 
 <# Import Entity #>
 . ".\isvg_im_lib\entities\Session.ps1"
@@ -19,7 +19,8 @@ Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.ps1 -force
 . ".\isvg_im_lib\proxies\Proxy_Role.ps1"
 . ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
 
-set_properties
+init_properties
+init_logging
 exit
 
 isim_ws_init

@@ -18,6 +18,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs
 7. import-export operation
 8. replace ISIM by ISVG IM
 9. init.ps: SSL checker
+10. verbose option
 
 ##### Functionalities
 
