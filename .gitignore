@@ -1,3 +1,2 @@
-ps/run_tst.ps1
-ps/logs/*
-ps/properties/isim.properties
+isvg_im_lib/logs/*
+isim.properties

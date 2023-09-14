@@ -1,36 +1,26 @@
 # Author:
 #	Leandro Valovits
-# Contributors:
-# 	philipp1184 for his great contribution with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184
-
-#TODO:
-	#	Configure log levels
-	#		How do Levels Works?
-	#		A log request of level p in a logger with level q is enabled if p >= q.
-	#		This rule is at the heart of log4j. It assumes that levels are ordered.
-	#		For the standard levels, we have ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF. 
-	#	debug logs
-	#	readme.txt	(scope|usage|error 1 at 1)
-	#	session expiration time ?
-	#	unit test exporting to csv and re-importing it to compare objects
-	#	ldap objects
-##############################################################################
-
-cd "c:\Users\crojovalovits\Automation\ISIM_v2"
+# References:
+# 	philipp1184:	for his great contribution with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184/isim-powershell
+#	cazdlt:			their pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
 
 <# Import functions section #>
-Import-Module $PSScriptRoot\isim_utils.ps1 -force
-Import-Module $PSScriptRoot\isim_utils_ws.ps1 -force
+#Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils.ps1 -force
+#Import-Module $PSScriptRoot\isvg_im_lib\utils\isim_utils_ws.ps1 -force
+Import-Module $PSScriptRoot\isvg_im_lib\utils\initialize.ps1 -force
 
-<# Import classes section #>
-. ".\ISIM_Session.ps1"
-. ".\ISIM_Role.ps1"
-. ".\ISIM_OrgUnit.ps1"
+<# Import Entity #>
+. ".\isvg_im_lib\entities\Session.ps1"
+. ".\isvg_im_lib\entities\Role.ps1"
+. ".\isvg_im_lib\entities\OrganizationalUnit.ps1"
 
 <# Import proxies section #>
-. ".\ISIM_Session_Proxy.ps1"
-. ".\ISIM_Role_Proxy.ps1"
-. ".\ISIM_OrgUnit_Proxy.ps1"
+. ".\isvg_im_lib\proxies\Proxy_Session.ps1"
+. ".\isvg_im_lib\proxies\Proxy_Role.ps1"
+. ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.ps1"
+
+set_properties
+exit
 
 isim_ws_init
 
