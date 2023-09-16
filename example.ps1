@@ -39,9 +39,15 @@ function Test-Connection(){
 	if ( $null -ne $creds){
 		$session_proxy.login($creds)
 	
+<<<<<<< HEAD
 		if ( -not ( [IM_Session]::GetSession().isEmpty() ) ){
 			Write-Host "Login success for user" $creds.UserName
 			Write-Host -ForegroundColor green 'Session object is a singleton. You can access it through [IM_Session]::GetSession()'
+=======
+		if ( -not ( [ISIM_Session]::GetSession().isEmpty() ) ){
+			Write-Host "Login success for user" $creds.UserName
+			Write-Host -ForegroundColor green 'Session object is a singleton. You can access it through [ISIM_Session]::GetSession()'
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 		}
 	}
 
@@ -49,9 +55,15 @@ function Test-Connection(){
 }
 
 function Test-SearchRoles(){
+<<<<<<< HEAD
 	$isim_session 		=	[IM_Session]::GetSession()
 
 	$role_proxy			=	[IM_Role_Proxy]::getProxy()
+=======
+	$isim_session 		=	[ISIM_Session]::GetSession()
+
+	$role_proxy			=	[ISIM_Role_Proxy]::getProxy()
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 	$role_proxy.init()
 	$isim_roles 		= $role_proxy.searchRoles($isim_session.raw , "(errolename=*)")
 
@@ -66,8 +78,13 @@ function Test-SearchRoles(){
 }
 
 function Test-SearchOrganizationalStructure(){
+<<<<<<< HEAD
 	$isim_session 				=	[IM_Session]::GetSession()
 	$ou_proxy					=	[IM_OrganizationalUnit_Proxy]::getProxy()
+=======
+	$isim_session 				=	[ISIM_Session]::GetSession()
+	$ou_proxy					=	[ISIM_OrgUnit_Proxy]::getProxy()
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 	$ou_proxy.init()
 
 	$isim_organization			=	$ou_proxy.getOrganization( $isim_session.raw, $GLOBAL:ISIM_WS_Props['ORGANIZATION_NAME'] )
@@ -87,17 +104,28 @@ function Test-SearchOrganizationalStructure(){
 }
 
 function Test-CreateStaticRoles(){
+<<<<<<< HEAD
 	$isim_session 						=	[IM_Session]::GetSession()
 	
 	$role_proxy							=	[IM_Role_Proxy]::getProxy()
 	$ou_proxy							=	[IM_OrganizationalUnit_Proxy]::getProxy()
+=======
+	$isim_session 						=	[ISIM_Session]::GetSession()
+	
+	$role_proxy							=	[ISIM_Role_Proxy]::getProxy()
+	$ou_proxy							=	[ISIM_OrgUnit_Proxy]::getProxy()
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 
 	$isim_organization					=	$ou_proxy.getOrganization( $isim_session.raw )
 	$isim_subtree						=	$ou_proxy.getOrganizationSubTree( $isim_session.raw , $isim_organization.raw)
 
 	$new_role_name						=	"WS v2 Static Test - " + $(timeStamp)
 	$new_role_desc						=	"Description for WS v2 Static Test - Next role in 5 seconds"
+<<<<<<< HEAD
 	$isim_new_staticRole				=	[IM_Role]::New($new_role_name, $new_role_desc)
+=======
+	$isim_new_staticRole				=	[ISIM_Role]::New($new_role_name, $new_role_desc)
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 	
 	$ws_new_staticRole					=	$role_proxy.getStub()
 	Convert-2WSObject $isim_new_staticRole $ws_new_staticRole
@@ -122,8 +150,13 @@ function Test-CreateStaticRoles(){
 }
 
 Test-Connection
+<<<<<<< HEAD
 Test-SearchRoles
 Test-SearchOrganizationalStructure
+=======
+# Test-SearchRoles
+# Test-SearchOrganizationalStructure
+>>>>>>> 13833664b3a7a72e0f22b10f608a6777b1e5c28c
 
 #TODO:	Test-SearchServices
 #TODO:	Test-SearchPerson
