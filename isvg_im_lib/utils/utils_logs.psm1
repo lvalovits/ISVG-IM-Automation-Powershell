@@ -1,38 +1,34 @@
-function timeStamp() { (Get-Date).toString("yyyy.MM.dd_HH.mm.ss") }
+using module ".\utils_properties.psm1"
+using module "..\enums\log_category.psm1"
 
-function set_log_file(){
-	$GLOBAL:PROPERTY_FILE.LIB.LOG_FILE	=	$PROPERTY_FILE.LIB.LOG_PATH + '\' + $(timeStamp) + ".log"
-}
+Class utils_logs{
 
-function validate_logpath() {
-	if (-not (Test-Path -PathType Container -Path $PROPERTY_FILE.LIB.LOG_PATH)){
-		Write-Warning "Creating log files directory: '$($PROPERTY_FILE.LIB.LOG_PATH)' on folder $(Convert-Path $PSScriptRoot\..\..\)"
-		New-Item -ItemType Directory -Path $PROPERTY_FILE.LIB.LOG_PATH > $null
-		$PROPERTY_FILE.LIB.LOG_PATH	=	Convert-Path $PROPERTY_FILE.LIB.LOG_PATH
+	static $version = 0.1.2
+	hidden static $subject = "utils_logs"
+
+	static [string] timeStamp() { return (Get-Date).toString("yyyy.MM.dd_HH.mm.ss") }
+
+	static [void] set_log_file(){
+		[utils_properties]::PROPERTIES.LIB.LOG_FILE	=	([utils_properties]::PROPERTIES.LIB.LOG_PATH) + '\' + $([utils_logs]::timeStamp()) + ".log"
 	}
-}
 
-function write_log(){
-	[CmdletBinding()]
-        param (
-			[Parameter(Mandatory, position=0)]
-			[ValidateSet(
-				"info", "error", "warning", "debug", "trace"
-			)]
-            $Category,
-			[Parameter(Mandatory, position=1)]
-			[string]	$Message
-		)
+	static [void] validate_logpath() {
+		if (-not (Test-Path -PathType Container -Path ([utils_properties]::PROPERTIES.LIB.LOG_PATH))){
+			Write-Warning "Creating log files directory: '$([utils_properties]::PROPERTIES.LIB.LOG_PATH)' on folder $(Convert-Path $($GLOBAL:PWD))"
+			New-Item -ItemType Directory -Path ([utils_properties]::PROPERTIES.LIB.LOG_PATH) > $null
+			[utils_properties]::PROPERTIES.LIB.LOG_PATH	=	Convert-Path ([utils_properties]::PROPERTIES.LIB.LOG_PATH)
+		}
+	}
 
-	$log_message	=	"$(timeStamp)	-	" + "[" + $category.ToUpper() + "]" + "	" + $message
-	
-	Add-content $PROPERTY_FILE.LIB.LOG_FILE -value $log_message
-	
-}
+	static [void] write_log([string] $Category, [string]	$Message){
+		$log_message	=	"$([utils_logs]::timeStamp())	-	" + "[" + $category.ToUpper() + "]" + "	" + $message
+		Add-content ([utils_properties]::PROPERTIES.LIB.LOG_FILE) -value $log_message
+	}
 
 
-function init_logging(){
-	validate_logpath
-	set_log_file
-	write_log -Category Info -Message "Log init completed"
+	static [void] _init_(){
+		[utils_logs]::validate_logpath()
+		[utils_logs]::set_log_file()
+		[utils_logs]::write_log([LOG_CATEGORY]::INF, "Log init completed")
+	}
 }

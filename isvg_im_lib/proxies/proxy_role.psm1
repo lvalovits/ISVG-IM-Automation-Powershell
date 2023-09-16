@@ -1,36 +1,35 @@
+using module "..\entities\Session.psm1"
+using module "..\entities\Role.psm1"
+
 #
+#	DO NOT:
+#		[IM_Role_Proxy]::new()
 #	usage:
-#		$role_proxy	=	[ISIM_Role_Proxy]::getProxy()
+#		$role_proxy	=	[IM_Role_Proxy]::getProxy()
 #		$role_proxy.init() : void
-#		$role_proxy.searchRoles( <raw_session> , <filter> ) : ISIM_Role[]
-#		$role_proxy.createStaticRole ( <raw_session> , <raw_container> , <raw_role> ) : ISIM_Role
-#		$role_proxy.getRawRole ( <ISIM_Role> ) : raw_role
+#		$role_proxy.searchRoles( <raw_session> , <filter> ) : IM_Role[]
+#		$role_proxy.createStaticRole ( <raw_session> , <raw_container> , <raw_role> ) : IM_Role
+#		$role_proxy.getRawRole ( <IM_Role> ) : raw_role
 #		$role_proxy.getStub() : raw_role
 #
 
-class ISIM_Role_Proxy{
+class IM_Role_Proxy{
 	################# Singleton start #################
-    hidden static [ISIM_Role_Proxy] $_instance	=	[ISIM_Role_Proxy]::new()
-    static [ISIM_Role_Proxy] $Instance			=	[ISIM_Role_Proxy]::getProxy()
-
-    hidden ISIM_Role_Proxy() {
-    }
-
-    hidden static [ISIM_Role_Proxy] getProxy() {
-        return [ISIM_Role_Proxy]::_instance
-    }
+    hidden static [IM_Role_Proxy] $_instance	=	[IM_Role_Proxy]::new()
+	hidden IM_Role_Proxy() {}
+    static [IM_Role_Proxy] getProxy() { return [IM_Role_Proxy]::_instance }
 	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$GLOBAL:ISIM_WSDL_ROLE
-	$proxy				=	$null
-	$namespace			=	$null
+	[string]$proxy_wsdl		=	$PROPERTY_FILE.ENDPOINTS.ROLE
+	$proxy					=	$null
+	$namespace				=	$null
 
 	[void]init(){
 		
 		$subject			=	"proxy init"
 
 		try{
-			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
+			if ( $null -eq [IM_Session]::GetSession().clientSession ){
 				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
@@ -57,7 +56,7 @@ class ISIM_Role_Proxy{
 
 		try{
 			
-			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
+			if ( $null -eq [IM_Session]::GetSession().clientSession ){
 				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
@@ -91,7 +90,7 @@ class ISIM_Role_Proxy{
 		
 				if($wsReturn.count -gt 0) {
 					$wsReturn | ForEach-Object{
-						$returnObject		=	[ISIM_Role]::new($_)
+						$returnObject		=	[IM_Role]::new($_)
 						$returnArray		+=	$returnObject
 					}
 				}
@@ -118,7 +117,7 @@ class ISIM_Role_Proxy{
 		return $returnArray
 	}
 
-	[ISIM_Role] createStaticRole ( $raw_session, $raw_container, $raw_role ){
+	[IM_Role] createStaticRole ( $raw_session, $raw_container, $raw_role ){
 		
 		$subject			=	"createStaticRole"
 		$returnObject		=	$null
@@ -133,7 +132,7 @@ class ISIM_Role_Proxy{
 				$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
 		
 				if($null -ne $wsReturn) {
-					$returnObject		=	[ISIM_Role]::new($wsReturn)
+					$returnObject		=	[IM_Role]::new($wsReturn)
 				}
 			}catch{
 				$exceptionMessage	=	"Error creating role"

@@ -1,34 +1,33 @@
+using module "..\entities\Session.psm1"
+using module "..\entities\OrganizationalUnit.psm1"
+
 #
+#	DO NOT:
+#		[IM_OrganizationalUnit_Proxy]::new()
 #	usage:
-#		$orgUnit_proxy	=	[ISIM_OrgUnit_Proxy]::getProxy()
+#		$orgUnit_proxy	=	[IM_OrganizationalUnit_Proxy]::getProxy()
 #		$orgUnit_proxy.init() : void
 #		$orgUnit_proxy.getOrganization(<raw_session>) : ISIM_OrgUnit
 #		$orgUnit_proxy.getOrganizationSubTree(<raw_session> , <raw_organization>) : ISIM_OrgUnit
 #
 
-class ISIM_OrgUnit_Proxy{
+class IM_OrganizationalUnit_Proxy{
 	################# Singleton start #################
-    hidden static [ISIM_OrgUnit_Proxy] $_instance	=	[ISIM_OrgUnit_Proxy]::new()
-    static [ISIM_OrgUnit_Proxy] $Instance			=	[ISIM_OrgUnit_Proxy]::getProxy()
-
-    hidden ISIM_OrgUnit_Proxy() {
-    }
-
-    hidden static [ISIM_OrgUnit_Proxy] getProxy() {
-        return [ISIM_OrgUnit_Proxy]::_instance
-    }
+    hidden static [IM_OrganizationalUnit_Proxy] $_instance	=	[IM_OrganizationalUnit_Proxy]::new()
+    hidden IM_OrganizationalUnit_Proxy() {}
+    static [IM_OrganizationalUnit_Proxy] getProxy() { return [IM_OrganizationalUnit_Proxy]::_instance }
 	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$GLOBAL:ISIM_WSDL_ORGANIZATIONALCONTAINER
-	$proxy			=	$null
-	$namespace		=	$null
+	[string]$proxy_wsdl		=	$PROPERTY_FILE.ENDPOINTS.ORGANIZATIONALCONTAINER
+	$proxy					=	$null
+	$namespace				=	$null
 
 	[void] init (){
 		
 		$subject			=	"proxy init"
 
 		try{
-			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
+			if ( $null -eq [IM_Session]::GetSession().clientSession ){
 				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
@@ -54,7 +53,7 @@ class ISIM_OrgUnit_Proxy{
 
 		try{
 			
-			if ( $null -eq [ISIM_Session]::GetSession().clientSession ){
+			if ( $null -eq [IM_Session]::GetSession().clientSession ){
 				$exceptionMessage	=	"Session not found."
 				Throw $exceptionMessage
 			}
@@ -72,7 +71,7 @@ class ISIM_OrgUnit_Proxy{
 		return $returnObject
 	}
 
-	[ISIM_Container] getOrganization ( $raw_session, $org_name){
+	[IM_Container] getOrganization ( $raw_session, $org_name){
 
 		$subject			=	"getOrganization"
 		$returnObject		=	$null
@@ -88,7 +87,7 @@ class ISIM_OrgUnit_Proxy{
 
 				if($wsReturn.count -gt 0) {
 					$wsReturnFiltered	=	$wsReturn | Where-Object { $_.name -eq $org_name}
-					$returnObject		=	[ISIM_Container]::new($wsReturnFiltered)
+					$returnObject		=	[IM_Container]::new($wsReturnFiltered)
 				}	
 			}catch{
 				$exceptionMessage	=	"Error retrieving organizations."
@@ -113,7 +112,7 @@ class ISIM_OrgUnit_Proxy{
 		return $returnObject	
 	}
 
-	[ISIM_Container] getOrganizationSubTree ( $raw_session , $raw_organization ){
+	[IM_Container] getOrganizationSubTree ( $raw_session , $raw_organization ){
 
 		$subject			=	"getOrganizationSubTree"
 		$returnObject		=	$null
@@ -128,7 +127,7 @@ class ISIM_OrgUnit_Proxy{
 				$wsReturn	=	$this.proxy.getOrganizationSubTree($wsSession, $raw_organization)
 				write-host 2
 				if($null -ne $wsReturn) {
-					$returnObject		=	[ISIM_Container]::new($wsReturn)
+					$returnObject		=	[IM_Container]::new($wsReturn)
 				}
 			}catch{
 				$exceptionMessage	=	"Error retrieving organizaton"

@@ -7,7 +7,10 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/ms-vscode.powershell?logo=visualstudiocode)
 ![GitHub](https://img.shields.io/github/license/lvalovits/ISVG-IM-Powershell)
 
-
+References:
+ * philipp1184:	for his great work understanding the namespaces on New-WebServiceProxy with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184/isim-powershell
+* cazdlt:			pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
+* guitarrapc:		for singleton powershell implementation. Link to public gist: https://gist.github.com/guitarrapc/2fde990d166286459c309b7cab03938b
 
 ##### TODO:
 - configure log levels
@@ -20,6 +23,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 - unit test exporting to csv and re-importing it to compare objects
 - ldap objects
 - import-export operation
+	- the singleton eliminates the possibility of working with 2 different environments (e.g. auto export->import)
 - replace ISIM by ISVG IM
 - utils_connections.ps: SSL checker
 	- Test self-signed certs
@@ -29,6 +33,13 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 		- ~~Purpose:~~
 		    - ~~If SSL, bypass it~~
 - verbose option
+- [utils_properties]::build_endpoints: validate ip_or_hostname input
+- error handlers
+	- [utils_properties]
+	- [utils_log]
+	- [utils_connections]
+	- [utils_proxy_wrapper]
+
 
 ##### Functionalities
 

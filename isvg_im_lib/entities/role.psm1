@@ -1,9 +1,9 @@
 #
 #	usage:
-#		[ISIM_Role]::new( <raw_role> )
+#		[IM_Role]::new( <raw_role> )
 #
 
-class ISIM_Role:ICloneable{
+class IM_Role{
 
 	$raw
 	
@@ -35,9 +35,9 @@ class ISIM_Role:ICloneable{
 		SUB_UNIT				=	"2"		
 	}
 
-	hidden ISIM_Role () {}
+	hidden IM_Role () {}
 
-	ISIM_Role ( $raw_role ){
+	IM_Role ( $raw_role ){
 		$this.raw			=	$raw_role
 		$this.name			=	$raw_role.Name
 		$this.description	=	$raw_role.description
@@ -48,12 +48,12 @@ class ISIM_Role:ICloneable{
 		}
 	}
 	
-	ISIM_Role ( [string]$name, [string]$description ){
+	IM_Role ( [string]$name, [string]$description ){
 		$this.name							=	$name
 		$this.attributes.description		=	$description
 	}
 
-	ISIM_Role ( [string]$name, [string]$description, [int]$scope, [string]$membership_rule ){
+	IM_Role ( [string]$name, [string]$description, [int]$scope, [string]$membership_rule ){
 		$this.name							=	$name
 		$this.attributes.description		=	$description
 		$this.attributes.erjavascript		=	$membership_rule
@@ -69,19 +69,5 @@ class ISIM_Role:ICloneable{
 			return -1
 		}
 	}
-
-	#TODO: add a way to clone from an ISIM_OBJECT to another
-	hidden [Object] Clone () {
-		$newObject	=	[ISIM_Role]::New()
-		foreach ($Property in ($this | Get-Member -MemberType Property))
-		{
-			if($Property.Name -eq "Attrbutes"){
-				$newObject.$($Property.Name)	=	$this.$($Property.Name).Clone()
-			}else{
-				$newObject.$($Property.Name)	=	$this.$($Property.Name)
-			}
-		} # foreach
-		return $newObject
-	} # Clone
 
 }

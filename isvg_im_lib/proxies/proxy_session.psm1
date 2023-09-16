@@ -1,32 +1,42 @@
+using module "..\entities\Session.psm1"
 #
+#	DO NOT:
+#		[IM_Session_Proxy]::new()
 #	usage:
-#		$session_proxy	=	[Session_Proxy]::getProxy()
+#		$session_proxy	=	[IM_Session_Proxy]::getProxy()
 #		$session_proxy.init() : void
 #		$session_proxy.login(<creds>) : void
 #		$session_proxy.logout(<raw_session>) : void
 #
 
-class Session_Proxy{
+class IM_Session_Proxy{
 	################# Singleton start #################
-    hidden static [Session_Proxy] $_instance	=	[Session_Proxy]::new()
-
-    hidden Session_Proxy() {}
-
-    hidden static [Session_Proxy] getProxy() {
-        return [Session_Proxy]::_instance
-    }
+    # hidden static [IM_Session_Proxy] $_instance	=	[IM_Session_Proxy]::new()
+    # hidden IM_Session_Proxy() {}
+    # static [IM_Session_Proxy] getProxy() { return [IM_Session_Proxy]::_instance }
 	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
+	static $proxies = @()
+
 	$proxy_session			=	$null
 	$namespace_session		=	$null
+
+	IM_Session_Proxy(){
+		[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
+		[IM_Session_Proxy]::proxies += $this
+	}
+
+	IM_Session_Proxy([ipaddress]$ip){
+		[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
+		[IM_Session_Proxy]::proxies += $this
+	}
 
 	[void]init(){
 		
 		$subject	=	"proxy init"
 
 		try{
-			[ISIM_Session]::GetSession().clean()
+			[IM_Session]::GetSession().clean()
 			$this.proxy_session	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
 			$this.namespace_session	=	$this.proxy_session.GetType().Namespace
 		}
@@ -52,7 +62,7 @@ class Session_Proxy{
 				
 				$wsReturn	=	$this.proxy_session.login( $isim_principal, $isim_seceret )
 		
-				$Session								=	[ISIM_Session]::GetSession()
+				$Session								=	[IM_Session]::GetSession()
 					$Session.raw						=	$wsReturn
 					$Session.sessionID					=	$wsReturn.sessionID
 					$Session.clientSession				=	$wsReturn.clientSession
@@ -63,7 +73,7 @@ class Session_Proxy{
 				
 			}catch{
 			
-				$Session							=	[ISIM_Session]::GetSession()
+				$Session							=	[IM_Session]::GetSession()
 				$Session.raw						=	$null
 				$Session.sessionID					=	$null
 				$Session.clientSession				=	$null
@@ -101,7 +111,7 @@ class Session_Proxy{
 			try{
 				$this.proxy_session.logout( $raw_session )
 			
-				$Session							=	[ISIM_Session]::GetSession()
+				$Session							=	[IM_Session]::GetSession()
 				$Session.raw						=	$null
 				$Session.sessionID					=	$null
 				$Session.clientSession				=	$null

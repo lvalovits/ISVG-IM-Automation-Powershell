@@ -1,18 +1,14 @@
 #
 #	usage:
-#		[ISIM_Session]::GetSession()
+#		[IM_Session]::GetSession()
 #
 
-Class ISIM_Session{
+Class IM_Session{
 
 	################# Singleton start #################
-	hidden static [ISIM_Session] $_instance		=	[ISIM_Session]::new()
-
-	hidden ISIM_Session() {}
-
-	static [ISIM_Session] GetSession() {
-		return [ISIM_Session]::_instance
-	}
+	hidden static [IM_Session] $_instance		=	[IM_Session]::new()
+	hidden IM_Session() {}
+	static [IM_Session] GetSession() { return [IM_Session]::_instance }
 	################## Singleton end ##################
 
 	$raw

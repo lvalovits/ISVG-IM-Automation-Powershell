@@ -1,9 +1,9 @@
 #
 #	usage:
-#		[ISIM_Container]::new( <raw_container> )
+#		[IM_Container]::new( <raw_container> )
 #
 
-Class ISIM_Container{
+Class IM_Container{
 
 	$raw
 	[string] $name
@@ -23,9 +23,9 @@ Class ISIM_Container{
 		description				=	$null
 	}
 
-	hidden ISIM_Container (){}
+	hidden IM_Container (){}
 
-	ISIM_Container ($raw_container){
+	IM_Container ($raw_container){
 		$this.raw			=	$raw_container
 		$this.name			=	$raw_container.Name
 		$this.profileName	=	$raw_container.ProfileName
@@ -39,7 +39,7 @@ Class ISIM_Container{
 
 		if ($null -ne $raw_container.children.parentDN){
 			$this.raw.children | ForEach-Object{
-				$this.children		+=	[ISIM_Container]::new($_)
+				$this.children		+=	[IM_Container]::new($_)
 			}
 		}
 

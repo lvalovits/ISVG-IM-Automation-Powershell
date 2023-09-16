@@ -22,8 +22,8 @@ function seekAndDestroy_roles{
 	write_log("seekAndDestroy_roles:	+ Deleting Roles using filter $filter")
 	
 	$session	=	getSession
-	$RoleClient	=	[ISIM_RoleClient]::getClient()
-	$roleToDel	=	[ISIM_Role]::new()
+	$RoleClient	=	[IM_RoleClient]::getClient()
+	$roleToDel	=	[IM_Role]::new()
 	
 	$RoleSearchResult	=	($RoleClient.searchRole($session, $filter))
 	
@@ -70,7 +70,7 @@ function newUser{
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory, position=0)]
-		[ISIM_Session] $session,
+		[IM_Session] $session,
 		[Parameter(Mandatory, position=1)]
 		[Int] $number
 	)
@@ -137,12 +137,12 @@ function newStaticRole{
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory, position=0)]
-		[ISIM_Session] $session,
+		[IM_Session] $session,
 		[Parameter(Mandatory, position=1)]
 		[Int] $number
 	)
-	$newRole	=	[ISIM_Role]::new()
-	$RoleClient	=	[ISIM_RoleClient]::getClient()
+	$newRole	=	[IM_Role]::new()
+	$RoleClient	=	[IM_RoleClient]::getClient()
 	$orgUnitClient	=	[ISIM_OrganizationalContainerClient]::getClient()
 
 	$newRole.name	=	"WS Static Test $number"
@@ -163,9 +163,9 @@ function newDynamicRole{
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory, position=0, ParameterSetName	=	'Role')]
-		[ISIM_Role]$role,
+		[IM_Role]$role,
 		[Parameter(position=1, ParameterSetName	=	'Role')]
-		[ISIM_Session]$session,
+		[IM_Session]$session,
 		[Parameter(position=2, ParameterSetName	=	'Role')]
 		[ISIM_OrganizationalContainer]$container
 	)
@@ -178,7 +178,7 @@ function newDynamicRole{
 		$container	=	$(getRootContainer $session)
 	}
 	
-	$roleClient	=	[ISIM_RoleClient]::getClient()
+	$roleClient	=	[IM_RoleClient]::getClient()
 	
 	write_log "newDynamicRole:	+ Creating role $($role.name)"
 	$newRole_requestID	=	$roleClient.createRole($session, $role, $container)
@@ -190,7 +190,7 @@ function getRootContainer{
 	[CmdletBinding()]
 	param (
 		[Parameter()]
-		[ISIM_Session] $session
+		[IM_Session] $session
 	)
 	if ($null -eq $session){$session	=	getSession}
 	$orgUnitClient	=	[ISIM_OrganizationalContainerClient]::getClient()
@@ -204,7 +204,7 @@ function getContainers{
 	[CmdletBinding()]
 	param (
 		[Parameter(Mandatory, position=0)]
-		[ISIM_Session] $session
+		[IM_Session] $session
 	)
 	$orgUnitClient	=	[ISIM_OrganizationalContainerClient]::getClient()
 	$OrgUnitSearchResult	=	($orgUnitClient.searchOrganizationalContainer($Session))
