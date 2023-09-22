@@ -25,7 +25,8 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 - import-export operation
 	- the singleton eliminates the possibility of working with 2 different environments (e.g. auto export->import)
 - replace ISIM by ISVG IM
-- utils_connections.ps: SSL checker
+- endpoints.psm1: SSL checker
+	- Test ICMP - add property to force IPv4 or IPv6
 	- Test self-signed certs
 	- Add support for others security protocols (property files)
 	- ~~ServerCertificateValidationCallback	=	true~~

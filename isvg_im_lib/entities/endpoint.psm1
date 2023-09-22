@@ -85,9 +85,14 @@ Class IM_Endpoint{
 
 	static [void] test_endpoints_ICMP($endpoint){
 		$dest_ip = $endpoint.ip_or_hostname
+
 		if (-not ([utils_properties]::PROPERTIES::LIB.DEPRECATED_TESTCONNECTION)){
-			if (-not (Test-Connection -Quiet -Count 1 $($dest_ip))){
+			$icmp_result = (Test-Connection -Count 1 $($dest_ip))
+			if (-not $($icmp_result)){
 				Write-Warning "Connection error to $($dest_ip)"
+			}else{
+				Write-Warning "ICMP test passed"
+				Write-Warning "$($dest_ip): $($icmp_result.responseTime)(ms)"
 			}
 		}else{
 			[IM_Endpoint]::test_endpoints_ICMP___deprecated($endpoint)
@@ -105,6 +110,10 @@ Class IM_Endpoint{
 				Write-Warning "$($dest_ip): Request timed out"
 			}elseif (($ping_return | Where-Object {$_ -match "Destination host unreachable"}) -gt 0){
 				Write-Warning "$($dest_ip): Destination host unreachable"
+			}else{
+				Write-Warning "$($dest_ip): ICMP test (deprecated) passed"
+				$ping_average = ([Regex]::Matches($ping_return, 'Average = (?<Avg>\d+ms)').Captures.Groups)['Avg'].value
+				Write-Warning "$($dest_ip): $($ping_average)"
 			}
 		}catch{
 			Write-Host -fore red "$($Error[0])"
