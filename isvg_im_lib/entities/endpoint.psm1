@@ -130,7 +130,8 @@ Class IM_Endpoint{
 				[System.Net.ServicePointManager]::ServerCertificateValidationCallback	=	{$true}
 				Write-Warning "SSL Connection to $($dest_ip):$($dest_port) BYPASSED"
 			}else{
-				[Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
+				# [Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
+				[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.ISIM.SSLPROTOCOL
 				[IM_Endpoint]::CheckSSL($endpoint)
 			}
 		}else{
@@ -142,11 +143,11 @@ Class IM_Endpoint{
 	static [void] CheckSSL([IM_Endpoint]$endpoint) {
 		$dest_fqdn		=	$endpoint.ip_or_hostname
 		$dest_port		=	$endpoint.port
-		$tcpSocket	=	$null
-		$tcpStream	=	$null
-		$sslStream	=	$null
-		$certinfo	=	$null
-		$result		=	$True
+		$tcpSocket		=	$null
+		$tcpStream		=	$null
+		$sslStream		=	$null
+		$certinfo		=	$null
+		$result			=	$True
 
 		try {
 			$tcpSocket	=	New-Object Net.Sockets.TcpClient($dest_fqdn, $dest_port)
@@ -168,10 +169,11 @@ Class IM_Endpoint{
 				$certinfo | Format-List -Property Subject, Issuer, FriendlyName, NotBefore, NotAfter, Thumbprint
 				$certinfo.Extensions | Where-Object -FilterScript { $_.Oid.FriendlyName -Like 'subject alt*' } | ForEach-Object -Process { $_.Oid.FriendlyName; $_.Format($true) }
 				$tcpSocket.Close()
+				Write-Warning "$($dest_fqdn):$($dest_port): HTTPS test passed"
 			} catch {
 				$result	=	$False
 				$tcpSocket.Close()
-				Write-Warning "$($dest_fqdn): $($_.Exception.InnerException.Message)"
+				Write-Warning "$($dest_fqdn):$($dest_port): $($_.Exception.InnerException.Message)"
 			}
 		}
 	}
