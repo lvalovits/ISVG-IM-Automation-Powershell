@@ -11,6 +11,12 @@ Class IM_Session{
 	# static [IM_Session] GetSession() { return [IM_Session]::_instance }
 	################## Singleton end ##################
 
+
+	static $version 						=	0.2.0
+	hidden static $subject 					=	"session"
+	static $sessions						=	@()
+	
+
 	$raw									=	$null
 	$sessionID								=	$null
 	$clientSession							=	$null
@@ -21,13 +27,17 @@ Class IM_Session{
 		language							=	$null
 	}
 
-	[void] clean(){
-		$this.raw							=	$null
-		$this.clientSession					=	$null
-		$this.sessionID						=	$null
-		$this.enforceChallengeResponse		=	$null
-		$this.locale | ForEach-Object{ $_	=	$null }
+	IM_Session() {
+		[IM_Session]::sessions				+=	$this
 	}
+
+	# [void] clean(){
+	# 	$this.raw							=	$null
+	# 	$this.clientSession					=	$null
+	# 	$this.sessionID						=	$null
+	# 	$this.enforceChallengeResponse		=	$null
+	# 	$this.locale | ForEach-Object{ $_	=	$null }
+	# }
 
 	[bool] isEmpty(){
 		return (( $null -eq $this.clientSession ) -or ( $null -eq $this.sessionID ) -or ( "" -eq $this.clientSession ) -or ( "" -eq $this.sessionID ))

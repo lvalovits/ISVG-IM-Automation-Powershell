@@ -28,14 +28,14 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 - endpoints.psm1: SSL checker
 	- Test ICMP - add property to force IPv4 or IPv6
 	- Test self-signed certs
-	- Add support for others security protocols (property files)
+	- ~~Add support for others security protocols (property files)~~
 	- ~~ServerCertificateValidationCallback	=	true~~
 		- ~~This property allows to run non-secure without any kind of validation~~
 		- ~~Purpose:~~
 		    - ~~If SSL, bypass it~~
-- verbose option
 - [utils_properties]::build_endpoints: validate ip_or_hostname input
 - error handlers
+	- Maybe a method/function to avoid repeat 4 or 5 catch lines?
 	- [utils_properties]
 	- [utils_log]
 	- [utils_connections]

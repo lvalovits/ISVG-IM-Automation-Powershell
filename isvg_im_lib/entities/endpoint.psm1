@@ -2,9 +2,9 @@ using module "..\utils\utils_properties.psm1"
 
 Class IM_Endpoint{
 
-	static $version = 0.2.2
-	hidden static $subject = "endpoints"
-	static $endpoints = @()
+	static $version 			=	0.2.3
+	hidden static $subject 		=	"endpoint"
+	static $endpoints 			=	@()
 
 	[bool] $secure
 	[string] $ip_or_hostname
@@ -12,7 +12,7 @@ Class IM_Endpoint{
 	[string] $protocol
 	[string] $endpoints_url
 
-	[psobject] $endpoints_list = @{
+	[psobject] $endpoints_list	=	@{
 		ACCOUNT					=	""
 		EXTENSION				=	""
 		GROUP					=	""

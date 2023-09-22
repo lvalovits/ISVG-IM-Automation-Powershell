@@ -1,11 +1,11 @@
 using module ".\isvg_im_lib\entities\endpoint.psm1"
-using module ".\isvg_im_lib\entities\Session.psm1"
-using module ".\isvg_im_lib\entities\Role.psm1"
-using module ".\isvg_im_lib\entities\OrganizationalUnit.psm1"
+using module ".\isvg_im_lib\entities\session.psm1"
+using module ".\isvg_im_lib\entities\role.psm1"
+using module ".\isvg_im_lib\entities\organizationalUnit.psm1"
 
-using module ".\isvg_im_lib\proxies\Proxy_Session.psm1"
-using module ".\isvg_im_lib\proxies\Proxy_Role.psm1"
-using module ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.psm1"
+using module ".\isvg_im_lib\proxies\Proxy_session.psm1"
+using module ".\isvg_im_lib\proxies\Proxy_role.psm1"
+using module ".\isvg_im_lib\proxies\Proxy_organizationalUnit.psm1"
 
 using module ".\isvg_im_lib\utils\utils_properties.psm1"
 using module ".\isvg_im_lib\utils\utils_logs.psm1"
@@ -25,14 +25,14 @@ else{ throw "initialization error" }
 
 # [IM_Endpoint]::new() | Out-Null # new endpoint from isim.properties
 [IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
-[IM_Endpoint]::new("google.com.ar", "443", $TRUE) | Out-Null
+# [IM_Endpoint]::new("google.com.ar", "443", $TRUE) | Out-Null
 
+$x = [IM_Session_Proxy]::new([IM_Endpoint]::endpoints[0], [IM_Session]::new())
 
+# [IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints)
+# [IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints)
 
-[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints)
-[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints)
-
-[IM_Endpoint]::endpoints
+# [IM_Endpoint]::endpoints
 
 
 # utils_init -SkipTest_Connections -SkipTest_Logging

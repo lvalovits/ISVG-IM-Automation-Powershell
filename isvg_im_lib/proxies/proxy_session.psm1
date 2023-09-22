@@ -1,4 +1,5 @@
 using module "..\utils\utils_properties.psm1"
+using module "..\utils\utils_logs.psm1"
 using module "..\entities\endpoint.psm1"
 using module "..\entities\session.psm1"
 #
@@ -24,34 +25,27 @@ class IM_Session_Proxy{
 	$namespace		=	$null
 	$proxy_wsdl		=	$null
 
-	hidden IM_Session_Proxy() {}
+	IM_Session_Proxy([IM_Endpoint] $endpoint, [IM_Session] $session){
+		$subject	=	"IM_Session_Proxy"
+		try{
+			$this.proxy_wsdl		=	$endpoint.endpoints_list.SESSION
+			$this.proxy				=	New-WebServiceProxy -Uri $endpoint.endpoints_list.SESSION -ErrorAction stop
+			$this.namespace			=	$this.proxy.GetType().Namespace
 
-	IM_Session_Proxy([IM_Endpoint]$endpoint){
-		$this.proxy_wsdl		=	$endpoint.endpoints_list.SESSION
-		$this.proxy				=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop
-		$this.namespace			=	$this.proxy.GetType().Namespace
-
-		[IM_Session_Proxy]::proxies += $this
+			[IM_Session_Proxy]::proxies	+=	$this
+		}catch{
+			Write-Warning "$($subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+		}finally{
+			throw 'Error initializing [IM_Session_Proxy] instance'
+		}
 	}
 
-	# [void]init(){
-		
-	# 	$subject	=	"proxy init"
+	# default constructor cannot be disable.
+	hidden IM_Session_Proxy() { throw 'Default constructor disabled. To instance a new proxy use IM_Session_Proxy::new( [IM_Endpoint] $endpoint, [IM_Session] $session )' }
 
-	# 	try{
-	# 		[IM_Session]::GetSession().clean()
-	# 		$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-	# 		$this.namespace	=	$this.proxy.GetType().Namespace
-	# 	}
-	# 	catch {
-	# 		$exceptionMessage	=	"Could not create proxy."
-	# 		Write-Host -fore red "$($subject): $exceptionMessage"
-	# 		write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-	# 		write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-	# 		write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-	# 		write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-	# 	}
-	# }
 
 	[void] login ( [PSCredential]$Credential ){
 
@@ -65,14 +59,15 @@ class IM_Session_Proxy{
 				
 				$wsReturn								=	$this.proxy.login( $isim_principal, $isim_seceret )
 		
-				$Session								=	[IM_Session]::GetSession()
-					$Session.raw						=	$wsReturn
-					$Session.sessionID					=	$wsReturn.sessionID
-					$Session.clientSession				=	$wsReturn.clientSession
-					$Session.enforceChallengeResponse	=	$wsReturn.enforceChallengeResponse
-					$wsReturn.locale | ForEach-Object{
-						$Session.locale.$($_.name)		=	$_.values
-					}
+				$Session								=	[IM_Session]::new()
+
+				$Session.raw							=	$wsReturn
+				$Session.sessionID						=	$wsReturn.sessionID
+				$Session.clientSession					=	$wsReturn.clientSession
+				$Session.enforceChallengeResponse		=	$wsReturn.enforceChallengeResponse
+				$wsReturn.locale | ForEach-Object{
+					$Session.locale.$($_.name)			=	$_.values
+				}
 				
 			}catch{
 			
@@ -85,23 +80,21 @@ class IM_Session_Proxy{
 				$Session.locale.language				=	$null
 				$Session.enforceChallengeResponse		=	$null
 
-				$exceptionMessage	=	"Authentication error."
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-			}
+				
+				Write-Warning "$($subject): $($PSItem)"
+				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
+				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+		}
 		}else{
 			$exceptionMessage	=	"Proxy not found."
 			try{
 				Throw $exceptionMessage
 			}catch{
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				Write-Warning "$($subject): $($PSItem)"
+				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
+				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
 			}
 		}	
 	}
@@ -128,23 +121,19 @@ class IM_Session_Proxy{
 				Write-Host
 
 			}catch{
-				$exceptionMessage	=	"Error loging out."
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				Write-Warning "$($subject): $($PSItem)"
+				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
+				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
 			}
 		}else{
-			$exceptionMessage	=	"Proxy not found."
 			try{
-				Throw $exceptionMessage
+				Throw
 			}catch{
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				Write-Warning "$($subject): $($PSItem)"
+				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
+				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
 			}
 		}		
 	}
