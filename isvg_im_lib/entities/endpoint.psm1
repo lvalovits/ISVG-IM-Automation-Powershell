@@ -83,19 +83,20 @@ Class IM_Endpoint{
 		[IM_Endpoint]::endpoints += $this
 	}
 
-	static [void] test_endpoints_ICMP($endpoint){
-		$dest_ip = $endpoint.ip_or_hostname
+	static [void] test_endpoints_ICMP([IM_Endpoint[]] $endpoints){
+		$endpoints | ForEach-Object{
+			$dest_ip = $_.ip_or_hostname
 
-		if (-not ([utils_properties]::PROPERTIES::LIB.DEPRECATED_TESTCONNECTION)){
-			$icmp_result = (Test-Connection -Count 1 $($dest_ip))
-			if (-not $($icmp_result)){
-				Write-Warning "Connection error to $($dest_ip)"
+			if (-not ([utils_properties]::PROPERTIES::LIB.DEPRECATED_TESTCONNECTION)){
+				$icmp_result = (Test-Connection -Count 1 $($dest_ip))
+				if (-not $($icmp_result)){
+					Write-Warning "Connection error to $($dest_ip)"
+				}else{
+					Write-Warning "$($dest_ip): ICMP test passed with $($icmp_result.responseTime)(ms)"
+				}
 			}else{
-				Write-Warning "ICMP test passed"
-				Write-Warning "$($dest_ip): $($icmp_result.responseTime)(ms)"
+				[IM_Endpoint]::test_endpoints_ICMP___deprecated($_)
 			}
-		}else{
-			[IM_Endpoint]::test_endpoints_ICMP___deprecated($endpoint)
 		}
 	}
 
@@ -120,22 +121,24 @@ Class IM_Endpoint{
 		}
 	}
 
-	static [void] test_endpoints_HTTPS([IM_Endpoint] $endpoint){	
-		$dest_ip	=	$endpoint.ip_or_hostname
-		$dest_port	=	$endpoint.port
-		$des_secure		=	$endpoint.secure
+	static [void] test_endpoints_HTTPS([IM_Endpoint[]] $endpoints){
+		$endpoints | ForEach-Object{
+			$dest_ip	=	$_.ip_or_hostname
+			$dest_port	=	$_.port
+			$des_secure		=	$_.secure
 
-		if ($des_secure){
-			if ([utils_properties]::PROPERTIES::LIB.SSL_SKIP_VALIDATION){
-				[System.Net.ServicePointManager]::ServerCertificateValidationCallback	=	{$true}
-				Write-Warning "SSL Connection to $($dest_ip):$($dest_port) BYPASSED"
+			if ($des_secure){
+				if ([utils_properties]::PROPERTIES::LIB.SSL_SKIP_VALIDATION){
+					[System.Net.ServicePointManager]::ServerCertificateValidationCallback	=	{$true}
+					Write-Warning "SSL Connection to $($dest_ip):$($dest_port) BYPASSED"
+				}else{
+					# [Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
+					[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.ISIM.SSLPROTOCOL
+					[IM_Endpoint]::CheckSSL($_)
+				}
 			}else{
-				# [Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
-				[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.ISIM.SSLPROTOCOL
-				[IM_Endpoint]::CheckSSL($endpoint)
+				Write-Warning "Endpoint not secure. SSL validation skiped"
 			}
-		}else{
-			Write-Warning "Endpoint not secure. SSL validation skiped"
 		}
 	}
 

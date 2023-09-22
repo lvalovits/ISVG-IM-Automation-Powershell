@@ -6,12 +6,12 @@
 Class IM_Session{
 
 	################# Singleton start #################
-	hidden static [IM_Session] $_instance		=	[IM_Session]::new()
-	hidden IM_Session() {}
-	static [IM_Session] GetSession() { return [IM_Session]::_instance }
+	# hidden static [IM_Session] $_instance		=	[IM_Session]::new()
+	# hidden IM_Session() {}
+	# static [IM_Session] GetSession() { return [IM_Session]::_instance }
 	################## Singleton end ##################
 
-	$raw
+	$raw									=	$null
 	$sessionID								=	$null
 	$clientSession							=	$null
 	$enforceChallengeResponse				=	$null

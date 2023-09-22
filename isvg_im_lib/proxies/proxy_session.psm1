@@ -28,8 +28,8 @@ class IM_Session_Proxy{
 
 	IM_Session_Proxy([IM_Endpoint]$endpoint){
 		$this.proxy_wsdl		=	$endpoint.endpoints_list.SESSION
-		$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop
-		$this.namespace	=	$this.proxy.GetType().Namespace
+		$this.proxy				=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop
+		$this.namespace			=	$this.proxy.GetType().Namespace
 
 		[IM_Session_Proxy]::proxies += $this
 	}
@@ -60,10 +60,10 @@ class IM_Session_Proxy{
 		if ($null -ne $this.proxy){
 			try{
 			
-				$isim_principal		=	$Credential.GetNetworkCredential().username
-				$isim_seceret		=	$Credential.GetNetworkCredential().password
+				$isim_principal							=	$Credential.GetNetworkCredential().username
+				$isim_seceret							=	$Credential.GetNetworkCredential().password
 				
-				$wsReturn	=	$this.proxy.login( $isim_principal, $isim_seceret )
+				$wsReturn								=	$this.proxy.login( $isim_principal, $isim_seceret )
 		
 				$Session								=	[IM_Session]::GetSession()
 					$Session.raw						=	$wsReturn
@@ -71,26 +71,26 @@ class IM_Session_Proxy{
 					$Session.clientSession				=	$wsReturn.clientSession
 					$Session.enforceChallengeResponse	=	$wsReturn.enforceChallengeResponse
 					$wsReturn.locale | ForEach-Object{
-						$Session.locale.$($_.name)	=	$_.values
+						$Session.locale.$($_.name)		=	$_.values
 					}
 				
 			}catch{
 			
-				$Session							=	[IM_Session]::GetSession()
-				$Session.raw						=	$null
-				$Session.sessionID					=	$null
-				$Session.clientSession				=	$null
-				$Session.locale.country				=	$null
-				$Session.locale.variant				=	$null
-				$Session.locale.language			=	$null
-				$Session.enforceChallengeResponse	=	$null
+				$Session								=	[IM_Session]::GetSession()
+				$Session.raw							=	$null
+				$Session.sessionID						=	$null
+				$Session.clientSession					=	$null
+				$Session.locale.country					=	$null
+				$Session.locale.variant					=	$null
+				$Session.locale.language				=	$null
+				$Session.enforceChallengeResponse		=	$null
 
 				$exceptionMessage	=	"Authentication error."
 				Write-Host -fore red "$($subject): $exceptionMessage"
 				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			$exceptionMessage	=	"Proxy not found."
@@ -99,9 +99,9 @@ class IM_Session_Proxy{
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
 				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}	
 	}
@@ -131,9 +131,9 @@ class IM_Session_Proxy{
 				$exceptionMessage	=	"Error loging out."
 				Write-Host -fore red "$($subject): $exceptionMessage"
 				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}else{
 			$exceptionMessage	=	"Proxy not found."
@@ -142,9 +142,9 @@ class IM_Session_Proxy{
 			}catch{
 				Write-Host -fore red "$($subject): $exceptionMessage"
 				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+				write_log "debug" "$($subject):	++	Exception:	$($PSItem)"
+				write_log "debug" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+				write_log "debug" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
 			}
 		}		
 	}

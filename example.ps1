@@ -23,20 +23,14 @@ if (
 ){ Write-Output "initialization completed" }
 else{ throw "initialization error" }
 
-# $x = [utils_endpoints]::get_endpoints(@("SYSTEMUSER","UNAUTH"))
-# [IM_Endpoint]::new() | Out-Null
+# [IM_Endpoint]::new() | Out-Null # new endpoint from isim.properties
 [IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
-[IM_Endpoint]::new("172.25.230.154", "9082", $TRUE) | Out-Null
+[IM_Endpoint]::new("google.com.ar", "443", $TRUE) | Out-Null
 
-exit
 
-[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints[0])
-[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints[1])
-# [IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints[2])
 
-[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints[0])
-[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints[1])
-# [IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints[2])
+[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints)
+[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints)
 
 [IM_Endpoint]::endpoints
 
