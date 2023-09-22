@@ -1,6 +1,6 @@
 Class utils_properties{
 
-	static $version = 0.1.5
+	static $version = 0.2.0
 	hidden static $subject = "utils_properties"
 
 	static $PROPERTY_FILE_PATH	=	@{
@@ -54,9 +54,17 @@ Class utils_properties{
 
 	static [void] set_sslskip_as_bool(){
 		try {
-			[utils_properties]::PROPERTIES.ISIM.SSL_SKIP_VALIDATION	=	[System.Convert]::ToBoolean([utils_properties]::PROPERTIES.ISIM.SSL_SKIP_VALIDATION)
+			[utils_properties]::PROPERTIES.LIB.SSL_SKIP_VALIDATION	=	[System.Convert]::ToBoolean([utils_properties]::PROPERTIES.LIB.SSL_SKIP_VALIDATION)
 		} catch [FormatException] {
-			[utils_properties]::PROPERTIES.ISIM.SSL_SKIP_VALIDATION	=	$false
+			[utils_properties]::PROPERTIES.LIB.SSL_SKIP_VALIDATION	=	$false
+		}
+	}
+
+		static [void] set_deprecatedtestconn_as_bool(){
+		try {
+			[utils_properties]::PROPERTIES.LIB.DEPRECATED_TESTCONNECTION	=	[System.Convert]::ToBoolean([utils_properties]::PROPERTIES.LIB.DEPRECATED_TESTCONNECTION)
+		} catch [FormatException] {
+			[utils_properties]::PROPERTIES.LIB.DEPRECATED_TESTCONNECTION	=	$false
 		}
 	}
 
@@ -72,61 +80,20 @@ Class utils_properties{
 			Write-Warning "Log files directory not found."
 		}
 	}
-	
-	static [void] build_endpoints(){
-		[utils_properties]::PROPERTIES.ISIM.URL	=	"https://" + [utils_properties]::PROPERTIES.ISIM.APP_HOST + ":" + [utils_properties]::PROPERTIES.ISIM.APP_PORT
-		
-		[utils_properties]::PROPERTIES.WSDL_FILES.keys | ForEach-Object {
-			if ($null -ne [utils_properties]::PROPERTIES.WSDL_FILES[$_]){
-				[utils_properties]::PROPERTIES.ENDPOINTS[$_]	=	"$([utils_properties]::PROPERTIES.ISIM.URL)$([utils_properties]::PROPERTIES.WSDL_FILES[$_])"
-			}else{
-				write_log error "Endpoint not found: $($_)" 
-			}
+
+	static [bool] _init_(){
+		try{
+			[utils_properties]::get_property()
+			[utils_properties]::set_debug_as_bool()
+			[utils_properties]::set_ssl_as_bool()
+			[utils_properties]::set_sslskip_as_bool()
+			[utils_properties]::set_deprecatedtestconn_as_bool()
+			[utils_properties]::set_logPath_as_path()
+			return $True
+		}catch{
+			Write-Warning "Ex.Message:	$($PSItem.exception.Message)"
+			Write-Warning "$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)"
+			return $False
 		}
-	}
-
-	static [void] build_endpoints([string]$IP_OR_HOSTNAME, [int]$PORT){
-
-		[utils_properties]::PROPERTIES.ISIM.URL	=	"https://" + $IP_OR_HOSTNAME + ":" + $PORT
-		
-		[utils_properties]::PROPERTIES.WSDL_FILES.keys | ForEach-Object {
-			if ($null -ne [utils_properties]::PROPERTIES.WSDL_FILES[$_]){
-				[utils_properties]::PROPERTIES.ENDPOINTS[$_]	=	"$([utils_properties]::PROPERTIES.ISIM.URL)$([utils_properties]::PROPERTIES.WSDL_FILES[$_])"
-			}
-		}
-	}
-
-	# Commented because string[] handle both scenarios (string & string[])
-
-		# static [void] build_endpoints([string]$IP_OR_HOSTNAME, [int]$PORT, [string]$ENDPOINT_NAME){
-		# 	[utils_properties]::PROPERTIES.ISIM.URL	=	"https://" + $IP_OR_HOSTNAME + ":" + $PORT
-			
-		# 	if ($null -ne [utils_properties]::PROPERTIES.WSDL_FILES[$ENDPOINT_NAME]){
-		# 		[utils_properties]::PROPERTIES.ENDPOINTS[$ENDPOINT_NAME]	=	"$([utils_properties]::PROPERTIES.ISIM.URL)$([utils_properties]::PROPERTIES.WSDL_FILES[$ENDPOINT_NAME])"
-		# 	}else{
-		# 		$exceptionMessage = "Endpoint not found: $($ENDPOINT_NAME)" 
-		# 		write_log "error" "$([utils_properties]::subject):	+ $($exceptionMessage)"
-		# 	}
-			
-		# }
-
-	static [void] build_endpoints([string]$IP_OR_HOSTNAME, [int]$PORT, [string[]]$ENDPOINT_NAME_LIST){
-		[utils_properties]::PROPERTIES.ISIM.URL	=	"https://" + $IP_OR_HOSTNAME + ":" + $PORT
-		$ENDPOINT_NAME_LIST | ForEach-Object {
-			if ($null -ne [utils_properties]::PROPERTIES.WSDL_FILES[$_]){
-				[utils_properties]::PROPERTIES.ENDPOINTS[$_]	=	"$([utils_properties]::PROPERTIES.ISIM.URL)$([utils_properties]::PROPERTIES.WSDL_FILES[$_])"
-			}else{
-				write_log error "Endpoint not found: $($_)" 
-			}
-		}
-	}
-
-	static [void] _init_(){
-		[utils_properties]::get_property()
-		[utils_properties]::set_debug_as_bool()
-		[utils_properties]::set_ssl_as_bool()
-		[utils_properties]::set_sslskip_as_bool()
-		[utils_properties]::set_logPath_as_path()
-		[utils_properties]::build_endpoints()
 	}
 }

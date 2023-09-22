@@ -3,7 +3,7 @@ using module "..\enums\log_category.psm1"
 
 Class utils_logs{
 
-	static $version = 0.1.2
+	static $version = 0.2.0
 	hidden static $subject = "utils_logs"
 
 	static [string] timeStamp() { return (Get-Date).toString("yyyy.MM.dd_HH.mm.ss") }
@@ -26,9 +26,16 @@ Class utils_logs{
 	}
 
 
-	static [void] _init_(){
-		[utils_logs]::validate_logpath()
-		[utils_logs]::set_log_file()
-		[utils_logs]::write_log([LOG_CATEGORY]::INF, "Log init completed")
+	static [bool] _init_(){
+		try{
+			[utils_logs]::validate_logpath()
+			[utils_logs]::set_log_file()
+			[utils_logs]::write_log([LOG_CATEGORY]::INF, "Log init completed")
+			return $True
+		}catch{
+			Write-Warning "Ex.Message:	$($PSItem.exception.Message)"
+			Write-Warning "$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)"
+			return $False
+		}
 	}
 }

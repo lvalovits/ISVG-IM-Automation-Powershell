@@ -1,3 +1,4 @@
+using module ".\isvg_im_lib\entities\endpoint.psm1"
 using module ".\isvg_im_lib\entities\Session.psm1"
 using module ".\isvg_im_lib\entities\Role.psm1"
 using module ".\isvg_im_lib\entities\OrganizationalUnit.psm1"
@@ -6,23 +7,34 @@ using module ".\isvg_im_lib\proxies\Proxy_Session.psm1"
 using module ".\isvg_im_lib\proxies\Proxy_Role.psm1"
 using module ".\isvg_im_lib\proxies\Proxy_OrganizationalUnit.psm1"
 
-using module ".\isvg_im_lib\utils\isvg_im_lib_init.psm1"
-
 using module ".\isvg_im_lib\utils\utils_properties.psm1"
 using module ".\isvg_im_lib\utils\utils_logs.psm1"
 
 using module ".\isvg_im_lib\enums\log_category.psm1"
 
-exit
-
 # $Global:PWD var is use to get the execution path to be send to static methods
-# unable to get $PSScriptRoot running in a static method
+# unable to get $PSScriptRoot inside a static method
 $Global:PWD = $($PSScriptRoot)
 
-[utils_properties]::_init_()
-[utils_logs]::_init_()
+# Initialize utils
+if (
+	$([utils_properties]::_init_()) -and
+	$([utils_logs]::_init_())
+){ Write-Output "initialization completed" }
+else{ throw "initialization error" }
 
-# _init_ -SkipTest_Connections -SkipTest_Properties
+# $x = [utils_endpoints]::get_endpoints(@("SYSTEMUSER","UNAUTH"))
+[IM_Endpoint]::new() | Out-Null
+[IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
+
+[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints[0])
+[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints[1])
+
+[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints[0])
+[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints[1])
+
+
+# utils_init -SkipTest_Connections -SkipTest_Logging
 exit
 function Test-Connection(){
 	$session_proxy	=	[ISIM_Session_Proxy]::getProxy()

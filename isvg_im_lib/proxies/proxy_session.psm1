@@ -1,4 +1,6 @@
-using module "..\entities\Session.psm1"
+using module "..\utils\utils_properties.psm1"
+using module "..\entities\endpoint.psm1"
+using module "..\entities\session.psm1"
 #
 #	DO NOT:
 #		[IM_Session_Proxy]::new()
@@ -18,49 +20,50 @@ class IM_Session_Proxy{
 
 	static $proxies = @()
 
-	$proxy_session			=	$null
-	$namespace_session		=	$null
+	$proxy			=	$null
+	$namespace		=	$null
+	$proxy_wsdl		=	$null
 
-	IM_Session_Proxy(){
-		[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
+	hidden IM_Session_Proxy() {}
+
+	IM_Session_Proxy([IM_Endpoint]$endpoint){
+		$this.proxy_wsdl		=	$endpoint.endpoints_list.SESSION
+		$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop
+		$this.namespace	=	$this.proxy.GetType().Namespace
+
 		[IM_Session_Proxy]::proxies += $this
 	}
 
-	IM_Session_Proxy([ipaddress]$ip){
-		[string]$proxy_wsdl		=	$GLOBAL:PROPERTY_FILE.ENDPOINTS.SESSION
-		[IM_Session_Proxy]::proxies += $this
-	}
-
-	[void]init(){
+	# [void]init(){
 		
-		$subject	=	"proxy init"
+	# 	$subject	=	"proxy init"
 
-		try{
-			[IM_Session]::GetSession().clean()
-			$this.proxy_session	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-			$this.namespace_session	=	$this.proxy_session.GetType().Namespace
-		}
-		catch {
-			$exceptionMessage	=	"Could not create proxy."
-			Write-Host -fore red "$($subject): $exceptionMessage"
-			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-		}
-	}
+	# 	try{
+	# 		[IM_Session]::GetSession().clean()
+	# 		$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
+	# 		$this.namespace	=	$this.proxy.GetType().Namespace
+	# 	}
+	# 	catch {
+	# 		$exceptionMessage	=	"Could not create proxy."
+	# 		Write-Host -fore red "$($subject): $exceptionMessage"
+	# 		write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+	# 		write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+	# 		write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+	# 		write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+	# 	}
+	# }
 
 	[void] login ( [PSCredential]$Credential ){
 
 		$subject	=	"login"
 
-		if ($null -ne $this.proxy_session){
+		if ($null -ne $this.proxy){
 			try{
 			
 				$isim_principal		=	$Credential.GetNetworkCredential().username
 				$isim_seceret		=	$Credential.GetNetworkCredential().password
 				
-				$wsReturn	=	$this.proxy_session.login( $isim_principal, $isim_seceret )
+				$wsReturn	=	$this.proxy.login( $isim_principal, $isim_seceret )
 		
 				$Session								=	[IM_Session]::GetSession()
 					$Session.raw						=	$wsReturn
@@ -107,9 +110,9 @@ class IM_Session_Proxy{
 
 		$subject	=	"logout"
 
-		if ($null -ne $this.proxy_session){
+		if ($null -ne $this.proxy){
 			try{
-				$this.proxy_session.logout( $raw_session )
+				$this.proxy.logout( $raw_session )
 			
 				$Session							=	[IM_Session]::GetSession()
 				$Session.raw						=	$null

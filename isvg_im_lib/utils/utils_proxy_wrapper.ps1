@@ -46,7 +46,7 @@ function Copy-ISIMObjectNamespace {
             }
         } else {
             if ( !$newObj.$pname ) {
-                 $newObj.$pname	=	New-Object ( $targetNS+"."+($_.TypeNameOfValue.Split(".")[-1].Split("[")[0]))
+                $newObj.$pname	=	New-Object ( $targetNS+"."+($_.TypeNameOfValue.Split(".")[-1].Split("[")[0]))
             }
             $newObj.$pname	=	Copy-ISIMObjectNamespace $obj.$pname $targetNS
         }
