@@ -1,9 +1,10 @@
 using module "..\utils\utils_properties.psm1"
+using module "..\utils\utils_logs.psm1"
 
 Class IM_Endpoint{
 
 	static $version 			=	0.2.3
-	hidden static $subject 		=	"endpoint"
+	hidden static $subject 		=	"IM_Endpoint"
 	static $endpoints 			=	@()
 
 	[bool] $secure
@@ -68,6 +69,9 @@ Class IM_Endpoint{
 		$this.endpoints_list	=	[IM_Endpoint]::get_endpoints_list($this)
 
 		[IM_Endpoint]::endpoints += $this
+		
+		[utils_logs]::write_log("TRACE", "$([IM_Endpoint]::subject):	++	New endpoint created: $($this.protocol)://$($this.ip_or_hostname):$($this.port)")
+
 	}
 
 	IM_Endpoint([string]$IP_OR_HOSTNAME, [int]$PORT, [bool] $SSL){
@@ -81,6 +85,10 @@ Class IM_Endpoint{
 		$this.endpoints_list	=	[IM_Endpoint]::get_endpoints_list($this)
 
 		[IM_Endpoint]::endpoints += $this
+
+		[IM_Endpoint]::endpoints += $this
+		
+		[utils_logs]::write_log("TRACE", "$([IM_Endpoint]::subject):	++	New endpoint created: $($this.protocol)://$($this.ip_or_hostname):$($this.port)")
 	}
 
 	static [void] test_endpoints_ICMP([IM_Endpoint[]] $endpoints){

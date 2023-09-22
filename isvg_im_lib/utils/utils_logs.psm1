@@ -3,7 +3,7 @@ using module "..\enums\log_category.psm1"
 
 Class utils_logs{
 
-	static $version = 0.2.0
+	static $version = 0.2.1
 	hidden static $subject = "utils_logs"
 
 	static [string] timeStamp() { return (Get-Date).toString("yyyy.MM.dd_HH.mm.ss") }
@@ -21,7 +21,7 @@ Class utils_logs{
 	}
 
 	static [void] write_log([string] $Category, [string]	$Message){
-		$log_message	=	"$([utils_logs]::timeStamp())	-	" + "[" + $category.ToUpper() + "]" + "	" + $message
+		$log_message	=	"$([utils_logs]::timeStamp())	" + "[" + $category.ToUpper() + "]" + "	" + $message
 		Add-content ([utils_properties]::PROPERTIES.LIB.LOG_FILE) -value $log_message
 	}
 
