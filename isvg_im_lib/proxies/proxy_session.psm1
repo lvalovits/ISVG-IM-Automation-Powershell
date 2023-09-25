@@ -55,7 +55,7 @@ class IM_Session_Proxy{
 
 		try{
 			$wsReturn								=	$this.proxy.login( $IM_Credential.GetNetworkCredential().username, $IM_Credential.GetNetworkCredential().password )
-			Clear-Variable -Name IM_Credential$
+			Clear-Variable -Name IM_Credential
 
 			$Session								=	[IM_Session]::new()
 
@@ -75,42 +75,28 @@ class IM_Session_Proxy{
 	}
 
 	[void] logout ( $raw_session ){
+		try{
+			$this.proxy.logout( $raw_session )
+		
+			$Session							=	[IM_Session]::GetSession()
+			$Session.raw						=	$null
+			$Session.sessionID					=	$null
+			$Session.clientSession				=	$null
+			$Session.locale.country				=	$null
+			$Session.locale.variant				=	$null
+			$Session.locale.language			=	$null
+			$Session.enforceChallengeResponse	=	$null
 
-		$subject	=	"logout"
+			Write-Host
+			Write-Host "Successfully logout" -ForegroundColor green
+			Write-Host
 
-		if ($null -ne $this.proxy){
-			try{
-				$this.proxy.logout( $raw_session )
-			
-				$Session							=	[IM_Session]::GetSession()
-				$Session.raw						=	$null
-				$Session.sessionID					=	$null
-				$Session.clientSession				=	$null
-				$Session.locale.country				=	$null
-				$Session.locale.variant				=	$null
-				$Session.locale.language			=	$null
-				$Session.enforceChallengeResponse	=	$null
-
-				Write-Host
-				Write-Host "Successfully logout" -ForegroundColor green
-				Write-Host
-
-			}catch{
-				Write-Warning "$($subject): $($PSItem)"
-				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
-				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
-				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
-			}
-		}else{
-			try{
-				Throw
-			}catch{
-				Write-Warning "$($subject): $($PSItem)"
-				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
-				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
-				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
-			}
-		}		
+		}catch{
+			Write-Warning "$([IM_Session_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Session_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+		}	
 	}
 
 }
