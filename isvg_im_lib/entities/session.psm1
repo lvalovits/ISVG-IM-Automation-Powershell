@@ -15,8 +15,6 @@ Class IM_Session{
 	static $version 						=	0.2.0
 	hidden static $subject 					=	"im_session"
 	static $sessions						=	@()
-	
-	$creds									=	$null
 
 	$raw									=	$null
 	$sessionID								=	$null

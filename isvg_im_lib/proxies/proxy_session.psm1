@@ -35,10 +35,10 @@ class IM_Session_Proxy{
 
 			[IM_Session_Proxy]::proxies	+=	$this
 		}catch{
-			Write-Warning "$($subject): $($PSItem)"
-			[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
-			[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
-			[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			Write-Warning "$([IM_Session_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Session_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
 			throw 'Error initializing [IM_Session_Proxy] instance'
 		}
 	}
@@ -53,53 +53,25 @@ class IM_Session_Proxy{
 
 	[void] login ( [PSCredential] $IM_Credential ){
 
-		$subject	=	"login"
+		try{
+			$wsReturn								=	$this.proxy.login( $IM_Credential.GetNetworkCredential().username, $IM_Credential.GetNetworkCredential().password )
+			Clear-Variable -Name IM_Credential$
 
-		if ($null -ne $this.proxy){
-			try{
-				
-				$wsReturn								=	$this.proxy.login( $IM_Credential.GetNetworkCredential().username, $IM_Credential.GetNetworkCredential().password )
+			$Session								=	[IM_Session]::new()
 
-				Clear-Variable -Name IM_Credential
-		
-				$Session								=	[IM_Session]::new()
-
-				$Session.raw							=	$wsReturn
-				$Session.sessionID						=	$wsReturn.sessionID
-				$Session.clientSession					=	$wsReturn.clientSession
-				$Session.enforceChallengeResponse		=	$wsReturn.enforceChallengeResponse
-				$wsReturn.locale | ForEach-Object{
-					$Session.locale.$($_.name)			=	$_.values
-				}
-				
-			}catch{
-			
-				$Session								=	[IM_Session]::GetSession()
-				$Session.raw							=	$null
-				$Session.sessionID						=	$null
-				$Session.clientSession					=	$null
-				$Session.locale.country					=	$null
-				$Session.locale.variant					=	$null
-				$Session.locale.language				=	$null
-				$Session.enforceChallengeResponse		=	$null
-
-				
-				Write-Warning "$($subject): $($PSItem)"
-				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
-				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
-				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
-		}
-		}else{
-			$exceptionMessage	=	"Proxy not found."
-			try{
-				Throw $exceptionMessage
-			}catch{
-				Write-Warning "$($subject): $($PSItem)"
-				[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
-				[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
-				[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			$Session.raw							=	$wsReturn
+			$Session.sessionID						=	$wsReturn.sessionID
+			$Session.clientSession					=	$wsReturn.clientSession
+			$Session.enforceChallengeResponse		=	$wsReturn.enforceChallengeResponse
+			$wsReturn.locale | ForEach-Object{
+				$Session.locale.$($_.name)			=	$_.values
 			}
-		}	
+		}catch{
+			Write-Warning "$([IM_Session_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Session_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Session_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+		}
 	}
 
 	[void] logout ( $raw_session ){
