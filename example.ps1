@@ -130,7 +130,7 @@ function Test-CreateStaticRoles(){
 }
 
 Test-Init
-Test-EndpointConnection
+Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 
 exit
 Test-SearchRoles
