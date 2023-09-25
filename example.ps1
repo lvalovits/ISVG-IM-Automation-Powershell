@@ -16,42 +16,43 @@ using module ".\isvg_im_lib\enums\log_category.psm1"
 # unable to get $PSScriptRoot inside a static method
 $Global:PWD = $($PSScriptRoot)
 
-# Initialize utils
-if (
-	$([utils_properties]::_init_()) -and
-	$([utils_logs]::_init_())
-){ Write-Output "initialization completed" }
-else{ throw "initialization error" }
+function Test-Init(){
+	# Initialize utils
+	if (
+		$([utils_properties]::_init_()) -and
+		$([utils_logs]::_init_())
+	){ Write-Output "initialization completed" }
+	else{ throw "initialization error" }
+}
 
-[IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
-[IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints)
-[IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints)
+function Test-EndpointConnection(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
 
-[IM_Session_Proxy]::new([IM_Endpoint]::endpoints[0])
-[IM_Session_Proxy]::proxies[0].login()
+        [Parameter(Mandatory)]
+        [int] $port,
 
-exit
-function Test-Connection(){
-	$session_proxy	=	[ISIM_Session_Proxy]::getProxy()
-	$session_proxy.init()
+        [Parameter(Mandatory)]
+        [bool] $secure
+    )
+
+	# New IM endpoint
+	# [IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
 	
-	$creds			=	$null
+	# Test endpoint connection
+	[IM_Endpoint]::test_endpoints_ICMP($im_endpoint)
+	[IM_Endpoint]::test_endpoints_HTTPS($im_endpoint)
 
-	try{
-		$creds		=	Get-Credential -Message "Enter your ISVG IM credential"
-	}catch{
-		Write-Host -fore red "$($Error[0])"
-	}
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
 
-	if ( $null -ne $creds){
-		$session_proxy.login($creds)
-	
-		if ( -not ( [IM_Session]::GetSession().isEmpty() ) ){
-			Write-Host "Login success for user" $creds.UserName
-			Write-Host -ForegroundColor green 'Session object is a singleton. You can access it through [IM_Session]::GetSession()'
-		}
-	}
+	# IM Login (returns a IM_Session object)
+	$im_session			=	$im_session_proxy.login()
 
+	Write-Host "Login success for user"
 	Write-Host
 }
 
@@ -128,7 +129,10 @@ function Test-CreateStaticRoles(){
 	Write-Host "Static role created:	" $isim_role.name
 }
 
-Test-Connection
+Test-Init
+Test-EndpointConnection
+
+exit
 Test-SearchRoles
 Test-SearchOrganizationalStructure
 

@@ -138,7 +138,7 @@ Class IM_Endpoint{
 			if ($des_secure){
 				if ([utils_properties]::PROPERTIES::LIB.SSL_SKIP_VALIDATION){
 					[System.Net.ServicePointManager]::ServerCertificateValidationCallback	=	{$true}
-					Write-Warning "SSL Connection to $($dest_ip):$($dest_port) BYPASSED"
+					Write-Warning "$($dest_ip):$($dest_port): SSL Connection to BYPASSED"
 				}else{
 					# [Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
 					[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.IM.SSLPROTOCOL
