@@ -35,11 +35,13 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 		    - ~~If SSL, bypass it~~
 - [utils_properties]::build_endpoints: validate ip_or_hostname input
 - error handlers
-	- Maybe a method/function to avoid repeat 4 or 5 catch lines?
+	- Maybe a method/function to avoid repeat the same 5 catch lines?
 	- [utils_properties]
 	- [utils_log]
 	- [utils_connections]
 	- [utils_proxy_wrapper]
+- Structural definitions
+	- Should endpoints have a proxy_list? Gonna think it in the future (my_endpoint.proxy_list.session , my_endpoint.proxy_list.roles , my_endpoint.proxy_list.person)
 
 
 ##### Functionalities

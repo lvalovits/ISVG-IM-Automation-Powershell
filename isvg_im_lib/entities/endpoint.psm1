@@ -4,7 +4,7 @@ using module "..\utils\utils_logs.psm1"
 Class IM_Endpoint{
 
 	static $version 			=	0.2.3
-	hidden static $subject 		=	"IM_Endpoint"
+	hidden static $subject 		=	"im_endpoint"
 	static $endpoints 			=	@()
 
 	[bool] $secure

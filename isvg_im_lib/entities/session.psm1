@@ -1,16 +1,4 @@
-#
-#	usage:
-#		[IM_Session]::GetSession()
-#
-
 Class IM_Session{
-
-	################# Singleton start #################
-	# hidden static [IM_Session] $_instance		=	[IM_Session]::new()
-	# hidden IM_Session() {}
-	# static [IM_Session] GetSession() { return [IM_Session]::_instance }
-	################## Singleton end ##################
-
 
 	static $version 						=	0.2.0
 	hidden static $subject 					=	"im_session"

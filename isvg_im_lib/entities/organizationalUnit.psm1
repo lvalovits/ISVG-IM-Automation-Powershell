@@ -1,9 +1,8 @@
-#
-#	usage:
-#		[IM_Container]::new( <raw_container> )
-#
-
 Class IM_Container{
+
+	static $version 						=	0.2.0
+	hidden static $subject 					=	"im_container"
+	static $containers						=	@()
 
 	$raw
 	[string] $name
@@ -23,7 +22,7 @@ Class IM_Container{
 		description				=	$null
 	}
 
-	hidden IM_Container (){}
+	hidden IM_Container () { throw 'Default constructor disabled. To instance a new container use [IM_Container]::new( [WSContainer] $raw_container )' }
 
 	IM_Container ($raw_container){
 		$this.raw			=	$raw_container

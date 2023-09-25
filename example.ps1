@@ -3,14 +3,16 @@ using module ".\isvg_im_lib\entities\session.psm1"
 using module ".\isvg_im_lib\entities\role.psm1"
 using module ".\isvg_im_lib\entities\organizationalUnit.psm1"
 
-using module ".\isvg_im_lib\proxies\Proxy_session.psm1"
-using module ".\isvg_im_lib\proxies\Proxy_role.psm1"
-using module ".\isvg_im_lib\proxies\Proxy_organizationalUnit.psm1"
+using module ".\isvg_im_lib\proxies\proxy_session.psm1"
+using module ".\isvg_im_lib\proxies\proxy_role.psm1"
+using module ".\isvg_im_lib\proxies\proxy_organizationalUnit.psm1"
 
 using module ".\isvg_im_lib\utils\utils_properties.psm1"
 using module ".\isvg_im_lib\utils\utils_logs.psm1"
 
 using module ".\isvg_im_lib\enums\log_category.psm1"
+
+Import-Module ".\isvg_im_lib\utils\utils_proxy_wrapper.ps1"
 
 # $Global:PWD var is use to get the execution path to be send to static methods
 # unable to get $PSScriptRoot inside a static method
@@ -18,7 +20,11 @@ $Global:PWD = $($PSScriptRoot)
 exit
 
 function Test-Init(){
+
 	# Initialize utils
+	#	- property files
+	#	- log file
+
 	if (
 		$([utils_properties]::_init_()) -and
 		$([utils_logs]::_init_())
@@ -53,7 +59,7 @@ function Test-EndpointConnection(){
 	# IM Login (returns a IM_Session object)
 	$im_session			=	$im_session_proxy.login()
 
-	Write-Host "Login success"
+	Write-Host -fore green "Login success"
 	Write-Host
 }
 
