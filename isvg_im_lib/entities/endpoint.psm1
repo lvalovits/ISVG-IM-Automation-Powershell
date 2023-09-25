@@ -85,8 +85,6 @@ Class IM_Endpoint{
 		$this.endpoints_list	=	[IM_Endpoint]::get_endpoints_list($this)
 
 		[IM_Endpoint]::endpoints += $this
-
-		[IM_Endpoint]::endpoints += $this
 		
 		[utils_logs]::write_log("TRACE", "$([IM_Endpoint]::subject):	++	New endpoint created: $($this.protocol)://$($this.ip_or_hostname):$($this.port)")
 	}

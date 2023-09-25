@@ -15,6 +15,7 @@ using module ".\isvg_im_lib\enums\log_category.psm1"
 # $Global:PWD var is use to get the execution path to be send to static methods
 # unable to get $PSScriptRoot inside a static method
 $Global:PWD = $($PSScriptRoot)
+exit
 
 function Test-Init(){
 	# Initialize utils
@@ -52,7 +53,7 @@ function Test-EndpointConnection(){
 	# IM Login (returns a IM_Session object)
 	$im_session			=	$im_session_proxy.login()
 
-	Write-Host "Login success for user"
+	Write-Host "Login success"
 	Write-Host
 }
 
