@@ -20,11 +20,11 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 		- For the standard levels, we have ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF. 
 - readme.txt	(scope|usage|error 1 by 1 on every operation)
 - session expiration time?
-- unit test exporting to csv and re-importing it to compare objects
 - ldap objects
-- import-export operation
+- import-export operation (json object please!!!)
 	- the singleton eliminates the possibility of working with 2 different environments (e.g. auto export->import)
 - replace ISIM by ISVG IM
+	- unit test exporting to ~~csv~~ JSON (!) and re-importing it to compare objects
 - endpoints.psm1: SSL checker
 	- Test ICMP - add property to force IPv4 or IPv6
 	- Test self-signed certs

@@ -60,9 +60,9 @@ Class IM_Endpoint{
 
 	IM_Endpoint(){
 
-		$this.secure			=	[utils_properties]::PROPERTIES.ISIM.SSL
-		$this.ip_or_hostname	=	[utils_properties]::PROPERTIES.ISIM.APP_HOST
-		$this.port				=	[utils_properties]::PROPERTIES.ISIM.APP_PORT
+		$this.secure			=	[utils_properties]::PROPERTIES.IM.SSL
+		$this.ip_or_hostname	=	[utils_properties]::PROPERTIES.IM.APP_HOST
+		$this.port				=	[utils_properties]::PROPERTIES.IM.APP_PORT
 
 		$this.protocol			=	[IM_Endpoint]::get_protocol($this)
 		$this.endpoints_url		=	[IM_Endpoint]::get_endpoints_url($this)
@@ -141,7 +141,7 @@ Class IM_Endpoint{
 					Write-Warning "SSL Connection to $($dest_ip):$($dest_port) BYPASSED"
 				}else{
 					# [Net.ServicePointManager]::SecurityProtocol	=	[Net.SecurityProtocolType]::Tls12
-					[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.ISIM.SSLPROTOCOL
+					[Net.ServicePointManager]::SecurityProtocol	=	[utils_properties]::PROPERTIES.IM.SSLPROTOCOL
 					[IM_Endpoint]::CheckSSL($_)
 				}
 			}else{

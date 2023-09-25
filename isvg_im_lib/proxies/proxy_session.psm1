@@ -19,14 +19,15 @@ class IM_Session_Proxy{
     # static [IM_Session_Proxy] getProxy() { return [IM_Session_Proxy]::_instance }
 	################# Singleton end #################
 
-	static $proxies = @()
+	static $version 						=	0.2.0
+	hidden static $subject 					=	"im_session_proxy"
+	static $proxies							=	@()
 
 	$proxy			=	$null
 	$namespace		=	$null
 	$proxy_wsdl		=	$null
 
-	IM_Session_Proxy([IM_Endpoint] $endpoint, [IM_Session] $session){
-		$subject	=	"IM_Session_Proxy"
+	IM_Session_Proxy([IM_Endpoint] $endpoint){
 		try{
 			$this.proxy_wsdl		=	$endpoint.endpoints_list.SESSION
 			$this.proxy				=	New-WebServiceProxy -Uri $endpoint.endpoints_list.SESSION -ErrorAction stop
@@ -38,7 +39,6 @@ class IM_Session_Proxy{
 			[utils_logs]::write_log("error", "$($subject):	++	Exception:	$($PSItem)")
 			[utils_logs]::write_log("debug", "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)")
 			[utils_logs]::write_log("debug", "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
-		}finally{
 			throw 'Error initializing [IM_Session_Proxy] instance'
 		}
 	}
@@ -46,18 +46,21 @@ class IM_Session_Proxy{
 	# default constructor cannot be disable.
 	hidden IM_Session_Proxy() { throw 'Default constructor disabled. To instance a new proxy use IM_Session_Proxy::new( [IM_Endpoint] $endpoint, [IM_Session] $session )' }
 
+	[void] login (){
+		# $im_cred	=	Get-Credential -Credential $null -Message "Enter your ISVG IM credential"
+		$this.login($(Get-Credential -Credential $null -Message "Enter your ISVG IM credential"))
+	}
 
-	[void] login ( [PSCredential]$Credential ){
+	[void] login ( [PSCredential] $IM_Credential ){
 
 		$subject	=	"login"
 
 		if ($null -ne $this.proxy){
 			try{
-			
-				$isim_principal							=	$Credential.GetNetworkCredential().username
-				$isim_seceret							=	$Credential.GetNetworkCredential().password
 				
-				$wsReturn								=	$this.proxy.login( $isim_principal, $isim_seceret )
+				$wsReturn								=	$this.proxy.login( $IM_Credential.GetNetworkCredential().username, $IM_Credential.GetNetworkCredential().password )
+
+				Clear-Variable -Name IM_Credential
 		
 				$Session								=	[IM_Session]::new()
 

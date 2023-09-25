@@ -7,8 +7,8 @@ using module "..\entities\OrganizationalUnit.psm1"
 #	usage:
 #		$orgUnit_proxy	=	[IM_OrganizationalUnit_Proxy]::getProxy()
 #		$orgUnit_proxy.init() : void
-#		$orgUnit_proxy.getOrganization(<raw_session>) : ISIM_OrgUnit
-#		$orgUnit_proxy.getOrganizationSubTree(<raw_session> , <raw_organization>) : ISIM_OrgUnit
+#		$orgUnit_proxy.getOrganization(<raw_session>) : IM_OrgUnit
+#		$orgUnit_proxy.getOrganizationSubTree(<raw_session> , <raw_organization>) : IM_OrgUnit
 #
 
 class IM_OrganizationalUnit_Proxy{

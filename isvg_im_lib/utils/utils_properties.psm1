@@ -4,14 +4,14 @@ Class utils_properties{
 	hidden static $subject = "utils_properties"
 
 	static $PROPERTY_FILE_PATH	=	@{
-		ISIM		=	Convert-Path "$($GLOBAL:PWD)\isim.properties"
+		IM		=	Convert-Path "$($GLOBAL:PWD)\im.properties"
 		LIB			=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\lib.properties"
 		XML_REQUEST	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\requests.properties"
 		WSDL_FILES	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\wsdl.properties"
 	}
 
 	static $PROPERTIES	=	@{
-		ISIM		=	@{}
+		IM		=	@{}
 		LIB			=	@{}
 		XML_REQUEST	=	@{}
 		WSDL_FILES	=	@{}
@@ -21,7 +21,7 @@ Class utils_properties{
 	static [void] get_property_files(){
 
 		[utils_properties]::PROPERTY_FILE_PATH	=	@{
-			ISIM		=	Convert-Path "$($GLOBAL:PWD)\isim.properties"
+			IM		=	Convert-Path "$($GLOBAL:PWD)\im.properties"
 			LIB			=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\lib.properties"
 			XML_REQUEST	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\requests.properties"
 			WSDL_FILES	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\wsdl.properties"
@@ -46,9 +46,9 @@ Class utils_properties{
 
 	static [void] set_ssl_as_bool(){
 		try {
-			[utils_properties]::PROPERTIES.ISIM.SSL	=	[System.Convert]::ToBoolean([utils_properties]::PROPERTIES.ISIM.SSL)
+			[utils_properties]::PROPERTIES.IM.SSL	=	[System.Convert]::ToBoolean([utils_properties]::PROPERTIES.IM.SSL)
 		} catch [FormatException] {
-			[utils_properties]::PROPERTIES.ISIM.SSL	=	$false
+			[utils_properties]::PROPERTIES.IM.SSL	=	$false
 		}
 	}
 

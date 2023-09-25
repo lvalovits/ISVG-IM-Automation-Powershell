@@ -23,11 +23,11 @@ if (
 ){ Write-Output "initialization completed" }
 else{ throw "initialization error" }
 
-# [IM_Endpoint]::new() | Out-Null # new endpoint from isim.properties
-[IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
-# [IM_Endpoint]::new("google.com.ar", "443", $TRUE) | Out-Null
+# # [IM_Endpoint]::new() | Out-Null # new endpoint from isim.properties
+# [IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
+# # [IM_Endpoint]::new("google.com.ar", "443", $TRUE) | Out-Null
 
-$x = [IM_Session_Proxy]::new([IM_Endpoint]::endpoints[0], [IM_Session]::new())
+# # $x = [IM_Session_Proxy]::new([IM_Endpoint]::endpoints[0], [IM_Session]::new())
 
 # [IM_Endpoint]::test_endpoints_ICMP([IM_Endpoint]::endpoints)
 # [IM_Endpoint]::test_endpoints_HTTPS([IM_Endpoint]::endpoints)
@@ -44,7 +44,7 @@ function Test-Connection(){
 	$creds			=	$null
 
 	try{
-		$creds		=	Get-Credential -Credential $null
+		$creds		=	Get-Credential -Credential $null -Message "Enter your ISVG IM credential"
 	}catch{
 		Write-Host -fore red "$($Error[0])"
 	}

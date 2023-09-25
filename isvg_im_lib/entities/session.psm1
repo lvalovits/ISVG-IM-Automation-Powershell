@@ -13,9 +13,10 @@ Class IM_Session{
 
 
 	static $version 						=	0.2.0
-	hidden static $subject 					=	"session"
+	hidden static $subject 					=	"im_session"
 	static $sessions						=	@()
 	
+	$creds									=	$null
 
 	$raw									=	$null
 	$sessionID								=	$null
@@ -30,14 +31,6 @@ Class IM_Session{
 	IM_Session() {
 		[IM_Session]::sessions				+=	$this
 	}
-
-	# [void] clean(){
-	# 	$this.raw							=	$null
-	# 	$this.clientSession					=	$null
-	# 	$this.sessionID						=	$null
-	# 	$this.enforceChallengeResponse		=	$null
-	# 	$this.locale | ForEach-Object{ $_	=	$null }
-	# }
 
 	[bool] isEmpty(){
 		return (( $null -eq $this.clientSession ) -or ( $null -eq $this.sessionID ) -or ( "" -eq $this.clientSession ) -or ( "" -eq $this.sessionID ))
