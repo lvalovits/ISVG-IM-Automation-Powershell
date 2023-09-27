@@ -79,11 +79,14 @@ function Test-GetOrganization(){
 	# New IM endpoint
 	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
 
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
+
 	# A valid session is required to retrieve info from IM
 	$im_session			=	$im_session_proxy.login()
 
 	# New organizational proxy
-	$im_session_proxy	=	[IM_OrganizationalUnit_Proxy]::new($im_endpoint)
+	$org_proxy	=	[IM_OrganizationalUnit_Proxy]::new($im_endpoint)
 
 	$root_orgs = $org_proxy.getOrganizationRoot($im_session, $pattern)
 	$tree_orgs = $org_proxy.getOrganizationTree($im_session, $pattern)
@@ -108,8 +111,6 @@ function Test-SearchRoles(){
 	Write-Host -ForegroundColor green 'Roles stored on $Global:isim_roles variable.'
 	Write-Host
 }
-
-
 
 function Test-CreateStaticRoles(){
 	$isim_session 						=	[IM_Session]::GetSession()
@@ -152,7 +153,6 @@ Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -patte
 
 exit
 Test-SearchRoles
-Test-SearchOrganizationalStructure
 
 #TODO:	Test-SearchServices
 #TODO:	Test-SearchPerson
