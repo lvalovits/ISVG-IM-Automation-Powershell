@@ -7,12 +7,12 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/ms-vscode.powershell?logo=visualstudiocode)
 ![GitHub](https://img.shields.io/github/license/lvalovits/ISVG-IM-Powershell)
 
-##### References:
+### References:
  * philipp1184:	for his great work understanding the namespaces on New-WebServiceProxy with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184/isim-powershell
 * cazdlt:			pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
 * guitarrapc:		for singleton powershell implementation. Link to public gist: https://gist.github.com/guitarrapc/2fde990d166286459c309b7cab03938b
 
-##### TODO:
+### TODO:
 - configure log levels
     - How do Levels Works?
     	- A log request of level p in a logger with level q is enabled if p >= q.
@@ -44,17 +44,32 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 	- Should endpoints have a proxy_list? Gonna think it in the future (my_endpoint.proxy_list.session , my_endpoint.proxy_list.roles , my_endpoint.proxy_list.person)
 
 
-##### Functionalities
+### Planned Functionalities
+- About IM objects:
 
-|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
-|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
-|	People			|			|			|		|			|			|			|			|
-|	Dynamic Roles	|			|			|		|			|			|			|			|
-|	Static Roles	|			|			|		|			|			|			|			|
-|	Prov. Policies	|			|			|		|			|			|			|			|
-|	Activities		|			|			|		|			|			|			|			|
-|	Org. Container	|			|			|		|			|			|			|			|
-|	Services		|			|			|		|			|			|			|			|
-|	Access			|			|			|		|			|			|			|			|
-|	Groups			|			|			|		|			|			|			|			|
-|	Accounts		|			|			|		|			|			|			|			|
+	|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
+	|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
+	|	People			|			|			|		|			|			|			|			|
+	|	Dynamic Roles	|			|			|		|			|			|			|			|
+	|	Static Roles	|			|			|		|			|			|			|			|
+	|	Prov. Policies	|			|			|		|			|			|			|			|
+	|	Activities		|			|			|		|			|			|			|			|
+	|	Org. Container	|	✅	|			|		|			|			|			|			|
+	|	Services		|			|			|		|			|			|			|			|
+	|	Access			|			|			|		|			|			|			|			|
+	|	Groups			|			|			|		|			|			|			|			|
+	|	Accounts		|			|			|		|			|			|			|			|
+
+- About Use Cases:
+	- ✅ User Login
+	- Change/Reset password
+	- Simple utils to do bulk operation (role, person, service, etc)
+		- Creation
+		- Suspend
+		- Delete
+	- Import/Export operation
+		- People
+		- Roles
+		- Policies
+		- ACIs
+		- Workflows/Operations
