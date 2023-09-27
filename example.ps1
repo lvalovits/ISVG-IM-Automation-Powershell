@@ -61,7 +61,7 @@ function Test-EndpointConnection(){
 	Write-Host
 }
 
-function Test-OrganizationalStructure(){
+function Test-GetOrganization(){
 	[CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -148,6 +148,7 @@ function Test-CreateStaticRoles(){
 
 Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
 
 exit
 Test-SearchRoles
