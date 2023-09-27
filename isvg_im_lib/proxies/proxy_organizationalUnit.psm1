@@ -8,8 +8,10 @@ using module "..\entities\organizationalUnit.psm1"
 #	usage:
 #		$session_proxy	=	[IM_Session_Proxy]::new(<im_endpoint>) : [IM_Session_Proxy]
 #
-#		$orgUnit_proxy.getOrganizationRoot(<session>) : IM_Container
-#		$orgUnit_proxy.getOrganizationSubTree(<session> , <organization>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationRoot(<session>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationRoot(<session>, <root_org_name_patter>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationTree(<session>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationTree(<session>, <root_org_name_patter>) : IM_Container[]
 #
 
 class IM_OrganizationalUnit_Proxy{
@@ -97,41 +99,48 @@ class IM_OrganizationalUnit_Proxy{
 		return $returnObject
 	}
 
-	[IM_Container] getOrganizationSubTree ($raw_session , $raw_organization){
-		$returnObject		=	$null
-		$returnArray		=	@()
-		$exceptionMessage	=	$null
+	[IM_Container[]] getOrganizationTree ([IM_Session] $s){
+		return $this.getOrganizationTree($s, $null)
+	}
 
-		if ($null -ne $this.proxy){
-			try{
+
+	[IM_Container[]] getOrganizationTree ([IM_Session] $s, [string] $patter){
+		$raw_session		=	$s.raw
+		$returnObject		=	@()
+
+		try{		
+			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieving organization tree")
+
+			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+			$wsReturn	=	$this.proxy.getOrganizationsTree($wsSession)
 			
-				$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-				write-host 1
-				$wsReturn	=	$this.proxy.getOrganizationSubTree($wsSession, $raw_organization)
-				write-host 2
-				if($null -ne $wsReturn) {
-					$returnObject		=	[IM_Container]::new($wsReturn)
+			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieved $($wsReturn.count) root organizations")
+			
+
+			if($wsReturn.count -gt 0) {
+				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Root organizations retrieved:")
+
+				if ($patter){
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on patter: '$($patter)'")
+					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $patter}
 				}
-			}catch{
-				$exceptionMessage	=	"Error retrieving organizaton"
-				Write-Host -fore red "$([IM_OrganizationalUnit_Proxy]::subject): $exceptionMessage"
-				write_log "error" "$([IM_OrganizationalUnit_Proxy]::subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+
+				$wsReturn | ForEach-Object{
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		$($_.name)")
+					$returnObject	+=	([IM_Container]::new($_))
+				}
 			}
-		}else{
-			try{
-				$exceptionMessage	=	"Proxy not found."
-				throw $exceptionMessage
-			}catch{
-				Write-Host -fore red "$([IM_OrganizationalUnit_Proxy]::subject): $exceptionMessage"
-				write_log "error" "$([IM_OrganizationalUnit_Proxy]::subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$([IM_OrganizationalUnit_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-			}
+		}catch{
+			Write-Warning "$([IM_OrganizationalUnit_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_OrganizationalUnit_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error retrieving root organizations'
 		}
+		
 		return $returnObject
 	}
+
+	
+
 }
