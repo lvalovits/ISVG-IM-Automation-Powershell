@@ -139,7 +139,8 @@ Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 
 $org_proxy = [IM_OrganizationalUnit_Proxy]::new([IM_Endpoint]::endpoints[0])
-$acme_org = $org_proxy.getOrganizationRoot([IM_Session]::sessions[0])
+$root_orgs = $org_proxy.getOrganizationRoot([IM_Session]::sessions[0])
+$tree_orgs = $org_proxy.getOrganizationTree([IM_Session]::sessions[0])
 
 exit
 Test-SearchRoles
