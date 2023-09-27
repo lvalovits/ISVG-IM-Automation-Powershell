@@ -17,7 +17,6 @@ Import-Module ".\isvg_im_lib\utils\utils_proxy_wrapper.ps1"
 # $Global:PWD var is use to get the execution path to be send to static methods
 # unable to get $PSScriptRoot inside a static method
 $Global:PWD = $($PSScriptRoot)
-exit
 
 function Test-Init(){
 

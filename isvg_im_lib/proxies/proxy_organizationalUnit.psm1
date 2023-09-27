@@ -55,12 +55,12 @@ class IM_OrganizationalUnit_Proxy{
 		return $returnObject
 	}
 
-	[IM_Container] getOrganizationRoot ([IM_Session] $s){
+	[IM_Container[]] getOrganizationRoot ([IM_Session] $s){
 		return $this.getOrganizationRoot($s, $null)
 	}
 
 
-	[IM_Container[]] getOrganizationRoot ([IM_Session] $s, [string] $org_name){
+	[IM_Container[]] getOrganizationRoot ([IM_Session] $s, [string] $patter){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -76,13 +76,14 @@ class IM_OrganizationalUnit_Proxy{
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Root organizations retrieved:")
 
-				if ($org_name){
-					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $org_name}
+				if ($patter){
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on patter: '$($patter)'")
+					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $patter}
 				}
 
 				$wsReturn | ForEach-Object{
-					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Root organization name: $($_.name)")
-					$returnObject.add([IM_Container]::new($_))
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		$($_.name)")
+					$returnObject	+=	([IM_Container]::new($_))
 				}
 			}
 		}catch{
