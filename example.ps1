@@ -45,7 +45,6 @@ function Test-EndpointConnection(){
     )
 
 	# New IM endpoint
-	# [IM_Endpoint]::new("google.com", "443", $TRUE) | Out-Null
 	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
 	
 	# Test endpoint connection
@@ -60,6 +59,37 @@ function Test-EndpointConnection(){
 
 	Write-Host -fore green "Login success"
 	Write-Host
+}
+
+function Test-OrganizationalStructure(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
+
+        [Parameter(Mandatory)]
+        [int] $port,
+
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[string] $pattern
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New organizational proxy
+	$im_session_proxy	=	[IM_OrganizationalUnit_Proxy]::new($im_endpoint)
+
+	$root_orgs = $org_proxy.getOrganizationRoot($im_session, $pattern)
+	$tree_orgs = $org_proxy.getOrganizationTree($im_session, $pattern)
+
+	Write-Host "Root organizations count:	$($root_orgs.count)"
+	Write-Host "Organization tree count:	$($tree_orgs.count)"
 }
 
 function Test-SearchRoles(){
@@ -79,26 +109,7 @@ function Test-SearchRoles(){
 	Write-Host
 }
 
-function Test-SearchOrganizationalStructure(){
-	$isim_session 				=	[IM_Session]::GetSession()
-	$ou_proxy					=	[IM_OrganizationalUnit_Proxy]::getProxy()
-	$ou_proxy.init()
 
-	$isim_organization			=	$ou_proxy.getOrganization( $isim_session.raw, $GLOBAL:ISIM_WS_Props['ORGANIZATION_NAME'] )
-	
-	$isim_organization_acmeInc	=	$isim_organization | Where-Object { $_.name -eq "Acme Inc."}
-
-	$isim_subtree				=	$ou_proxy.getOrganizationSubTree( $isim_session.raw , $isim_organization_acmeInc.raw)
-
-	Write-Host "Organizations count:	" $isim_organization.count	"'#TODO: remove filter by org name?'"
-	Write-Host "Subtree count:		" $isim_subtree.count			"'#TODO: count child items'"
-
-	# Global variable to export organizational structure search result for demo purposes
-	$Global:isim_organization	=	$isim_organization
-	$Global:isim_subtree 		=	$isim_subtree
-	Write-Host -ForegroundColor green 'Organizations have been stored on $Global:isim_organization variable.'
-	Write-Host -ForegroundColor green 'Organizational Structure have been stored on $Global:isim_subtree variable.'
-}
 
 function Test-CreateStaticRoles(){
 	$isim_session 						=	[IM_Session]::GetSession()
@@ -137,10 +148,6 @@ function Test-CreateStaticRoles(){
 
 Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
-
-$org_proxy = [IM_OrganizationalUnit_Proxy]::new([IM_Endpoint]::endpoints[0])
-$root_orgs = $org_proxy.getOrganizationRoot([IM_Session]::sessions[0])
-$tree_orgs = $org_proxy.getOrganizationTree([IM_Session]::sessions[0])
 
 exit
 Test-SearchRoles
