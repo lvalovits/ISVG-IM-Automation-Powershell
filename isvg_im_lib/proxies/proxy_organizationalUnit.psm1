@@ -9,9 +9,9 @@ using module "..\entities\organizationalUnit.psm1"
 #		$session_proxy	=	[IM_Session_Proxy]::new(<im_endpoint>) : [IM_Session_Proxy]
 #
 #		$orgUnit_proxy.getOrganizationRoot(<session>) : IM_Container[]
-#		$orgUnit_proxy.getOrganizationRoot(<session>, <root_org_name_patter>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationRoot(<session>, <root_org_name_pattern>) : IM_Container[]
 #		$orgUnit_proxy.getOrganizationTree(<session>) : IM_Container[]
-#		$orgUnit_proxy.getOrganizationTree(<session>, <root_org_name_patter>) : IM_Container[]
+#		$orgUnit_proxy.getOrganizationTree(<session>, <root_org_name_pattern>) : IM_Container[]
 #
 
 class IM_OrganizationalUnit_Proxy{
@@ -62,7 +62,7 @@ class IM_OrganizationalUnit_Proxy{
 	}
 
 
-	[IM_Container[]] getOrganizationRoot ([IM_Session] $s, [string] $patter){
+	[IM_Container[]] getOrganizationRoot ([IM_Session] $s, [string] $pattern){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -78,9 +78,9 @@ class IM_OrganizationalUnit_Proxy{
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Root organizations retrieved:")
 
-				if ($patter){
-					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on patter: '$($patter)'")
-					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $patter}
+				if ($pattern){
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
+					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
 				}
 
 				$wsReturn | ForEach-Object{
@@ -104,7 +104,7 @@ class IM_OrganizationalUnit_Proxy{
 	}
 
 
-	[IM_Container[]] getOrganizationTree ([IM_Session] $s, [string] $patter){
+	[IM_Container[]] getOrganizationTree ([IM_Session] $s, [string] $pattern){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -112,7 +112,7 @@ class IM_OrganizationalUnit_Proxy{
 			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieving organization tree")
 
 			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-			$wsReturn	=	$this.proxy.getOrganizationsTree($wsSession)
+			$wsReturn	=	$this.proxy.getOrganizationTree($wsSession)
 			
 			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieved $($wsReturn.count) root organizations")
 			
@@ -120,9 +120,9 @@ class IM_OrganizationalUnit_Proxy{
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Root organizations retrieved:")
 
-				if ($patter){
-					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on patter: '$($patter)'")
-					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $patter}
+				if ($pattern){
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
+					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
 				}
 
 				$wsReturn | ForEach-Object{
