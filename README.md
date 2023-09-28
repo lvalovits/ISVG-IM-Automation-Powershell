@@ -13,6 +13,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 * guitarrapc:		for singleton powershell implementation. Link to public gist: https://gist.github.com/guitarrapc/2fde990d166286459c309b7cab03938b
 
 ### TODO:
+- organize TODOs
 - configure log levels
     - How do Levels Works?
     	- A log request of level p in a logger with level q is enabled if p >= q.
