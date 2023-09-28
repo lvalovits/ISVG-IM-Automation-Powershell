@@ -58,6 +58,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 
 ### TODO:
 - organize TODOs
+- changelog
 - configure log levels
     - How do Levels Works?
     	- A log request of level p in a logger with level q is enabled if p >= q.
@@ -67,7 +68,6 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 - session expiration time?
 - ldap objects?
 - import-export operation (json object please!!!)
-	- the singleton eliminates the possibility of working with 2 different environments (e.g. auto export->import)
 	- unit test exporting to ~~csv~~ JSON (!) and re-importing it to compare objects
 - ~~replace ISIM by ISVG IM~~
 - endpoints.psm1: SSL checker
