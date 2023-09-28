@@ -3,6 +3,7 @@ using module ".\isvg_im_lib\entities\session.psm1"
 using module ".\isvg_im_lib\entities\role.psm1"
 using module ".\isvg_im_lib\entities\organizationalUnit.psm1"
 
+using module ".\isvg_im_lib\proxies\proxy_unauth.psm1"
 using module ".\isvg_im_lib\proxies\proxy_session.psm1"
 using module ".\isvg_im_lib\proxies\proxy_role.psm1"
 using module ".\isvg_im_lib\proxies\proxy_organizationalUnit.psm1"
@@ -249,7 +250,7 @@ Test-Init
 # Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
+# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 exit
 
 #TODO:	Test-SearchPerson

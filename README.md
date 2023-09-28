@@ -28,18 +28,18 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ## Planned Functionalities
 - About IM objects:
 
-	|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
-	|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
+	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Suspend	|	Restore	|	Modify	|
+	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
 	|	People			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
-	|	Dynamic Roles	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Static Roles	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Prov. Policies	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Activities		|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&cross;	|	&cross;	| &cross;	|
-	|	Org. Container	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Services		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Access			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Groups			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	| &#9744;	|
-	|	Accounts		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	| &#9744;	|
+	|	Dynamic Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Static Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Prov. Policies	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Activities		|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&cross;	|	&cross;	|	&cross;	|
+	|	Org. Container	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Services		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Access			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Groups			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
+	|	Accounts		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
 
 - About Use Cases:
 	- [x] User Login
