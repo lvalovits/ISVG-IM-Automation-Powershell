@@ -1,5 +1,6 @@
 using module "..\utils\utils_properties.psm1"
 using module "..\utils\utils_logs.psm1"
+
 using module "..\entities\endpoint.psm1"
 using module "..\entities\session.psm1"
 using module "..\entities\organizationalUnit.psm1"
@@ -156,11 +157,6 @@ class IM_OrganizationalUnit_Proxy{
 
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Containers retrieved:")
-
-				# if ($pattern){
-				# 	[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
-				# 	$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
-				# }
 
 				$wsReturn | ForEach-Object{
 					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		$($_.name)")

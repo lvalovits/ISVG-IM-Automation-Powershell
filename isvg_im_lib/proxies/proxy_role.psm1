@@ -1,4 +1,8 @@
-using module "..\entities\Session.psm1"
+using module "..\utils\utils_properties.psm1"
+using module "..\utils\utils_logs.psm1"
+
+using module "..\entities\endpoint.psm1"
+using module "..\entities\session.psm1"
 using module "..\entities\Role.psm1"
 
 #
@@ -14,147 +18,146 @@ using module "..\entities\Role.psm1"
 #
 
 class IM_Role_Proxy{
-	################# Singleton start #################
-    hidden static [IM_Role_Proxy] $_instance	=	[IM_Role_Proxy]::new()
-	hidden IM_Role_Proxy() {}
-    static [IM_Role_Proxy] getProxy() { return [IM_Role_Proxy]::_instance }
-	################# Singleton end #################
 
-	[string]$proxy_wsdl		=	$PROPERTY_FILE.ENDPOINTS.ROLE
+	static $version 		=	0.2.0
+	hidden static $subject 	=	"im_role_proxy"
+	static $proxies			=	@()
+
 	$proxy					=	$null
 	$namespace				=	$null
+	$proxy_wsdl				=	$null
 
-	[void]init(){
-		
-		$subject			=	"proxy init"
+	hidden IM_Role_Proxy() { throw 'Default constructor disabled. To instance a new proxy use [IM_Role_Proxy]::new( [IM_Endpoint] $endpoint )' }
 
+	IM_Role_Proxy([IM_Endpoint] $endpoint){
 		try{
-			if ( $null -eq [IM_Session]::GetSession().clientSession ){
-				$exceptionMessage	=	"Session not found."
-				Throw $exceptionMessage
-			}
+			$this.proxy_wsdl		=	$endpoint.endpoints_list.ROLE
+			$this.proxy				=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop
+			$this.namespace			=	$this.proxy.GetType().Namespace
 
-			$this.proxy	=	New-WebServiceProxy -Uri $this.proxy_wsdl -ErrorAction stop # -Namespace "WebServiceProxy" -Class "Session"
-			$this.namespace	=	$this.proxy.GetType().Namespace
-		}
-		catch {
-			$exceptionMessage	=	"Could not create proxy."
-			Write-Host -fore red "$($subject): $exceptionMessage"
-			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-		}
-	}
-
-	[psObject] getStub(){
-		
-		$subject			=	"getStub"
-		$returnObject		=	$null
-		$returnArray		=	@()
-		$exceptionMessage	=	$null
-
-		try{
-			
-			if ( $null -eq [IM_Session]::GetSession().clientSession ){
-				$exceptionMessage	=	"Session not found."
-				Throw $exceptionMessage
-			}
-
-			$returnObject	=	New-Object $($this.namespace+".WSRole")
-
+			[IM_Role_Proxy]::proxies	+=	$this
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	New role proxy created: $($this.proxy_wsdl)")
 		}catch{
-			if ( $null -eq $exceptionMessage) { $exceptionMessage	=	"Unhandled error" }
-			Write-Host -fore red "$($subject): $exceptionMessage"
-			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+			Write-Warning "$([IM_Role_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Role_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error initializing [IM_Role_Proxy] instance'
 		}
-		return $returnObject
 	}
 
-	[array] searchRoles ( $raw_session, [string]$filter ){
+	[IM_Role[]] searchRoles ([IM_Session] $s){
+		return $this.searchRoles($s, $null)
+	}
 
-		$subject			=	"searchRoles"
-		$returnObject		=	$null
-		$returnArray		=	@()
-		$exceptionMessage	=	$null
+	[IM_Role[]] searchRoles ([IM_Session] $s, [string] $pattern){
+		$raw_session		=	$s.raw
+		$returnObject		=	@()
 
-		if ($null -ne $this.proxy){
-			try{
+		try{		
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieving roles")
+
+			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+			$wsReturn	=	$this.proxy.searchRoles($wsSession)
 			
-				$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-				
-				$wsReturn	=	$this.proxy.searchRoles($wsSession, $filter)
-		
-				if($wsReturn.count -gt 0) {
-					$wsReturn | ForEach-Object{
-						$returnObject		=	[IM_Role]::new($_)
-						$returnArray		+=	$returnObject
-					}
-				}
-			}catch{
-				$exceptionMessage	=	"Error retrieving roles."
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-			}
-		}else{
-			try{
-				$exceptionMessage	=	"Proxy not found."
-				throw $exceptionMessage
-			}catch{
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-			}
-		}
-		return $returnArray
-	}
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieved $($wsReturn.count) roles")
+			
 
-	[IM_Role] createStaticRole ( $raw_session, $raw_container, $raw_role ){
-		
-		$subject			=	"createStaticRole"
-		$returnObject		=	$null
-		$returnArray		=	@()
-		$exceptionMessage	=	$null
+			if($wsReturn.count -gt 0) {
+				[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++	Roles retrieved:")
 
-		if ($null -ne $this.proxy){
-			try{
-				$wsSession		=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-				$wsContainer	=	Copy-ISIMObjectNamespace $raw_container $this.namespace
-				
-				$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
-		
-				if($null -ne $wsReturn) {
-					$returnObject		=	[IM_Role]::new($wsReturn)
+				if ($pattern){
+					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
+					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
 				}
-			}catch{
-				$exceptionMessage	=	"Error creating role"
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+
+				$wsReturn | ForEach-Object{
+					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		$($_.name)")
+					$returnObject	+=	([IM_Role]::new($_))
+				}
 			}
-		}else{
-			try{
-				$exceptionMessage	=	"Proxy not found."
-				throw $exceptionMessage
-			}catch{
-				Write-Host -fore red "$($subject): $exceptionMessage"
-				write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-				write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-				write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-				write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-			}
+		}catch{
+			Write-Warning "$([IM_Role_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Role_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error retrieving roles'
 		}
+		
 		return $returnObject
 	}
+
+	[IM_Role[]] lookupRole ([IM_Session] $s, [string] $dn){
+		$raw_session		=	$s.raw
+		$returnObject		=	@()
+
+		try{		
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieving role by DN")
+			[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++	Looking up DN: $($dn)")
+
+			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+			$wsReturn	=	$this.proxy.lookupRole($wsSession, $dn)
+			
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieved $($wsReturn.count) roles")
+			
+
+			if($wsReturn.count -gt 0) {
+				[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++	Roles retrieved:")
+
+				$wsReturn | ForEach-Object{
+					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		$($_.name)")
+					$returnObject	+=	([IM_Role]::new($_))
+				}
+			}
+		}catch{
+			Write-Warning "$([IM_Role_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Role_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error retrieving roles'
+		}
+		
+		return $returnObject
+	}
+
+	# [IM_Role] createStaticRole ( $raw_session, $raw_container, $raw_role ){
+		
+	# 	$subject			=	"createStaticRole"
+	# 	$returnObject		=	$null
+	# 	$returnArray		=	@()
+	# 	$exceptionMessage	=	$null
+
+	# 	if ($null -ne $this.proxy){
+	# 		try{
+	# 			$wsSession		=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+	# 			$wsContainer	=	Copy-ISIMObjectNamespace $raw_container $this.namespace
+				
+	# 			$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
+		
+	# 			if($null -ne $wsReturn) {
+	# 				$returnObject		=	[IM_Role]::new($wsReturn)
+	# 			}
+	# 		}catch{
+	# 			$exceptionMessage	=	"Error creating role"
+	# 			Write-Host -fore red "$($subject): $exceptionMessage"
+	# 			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+	# 			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+	# 			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+	# 			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+	# 		}
+	# 	}else{
+	# 		try{
+	# 			$exceptionMessage	=	"Proxy not found."
+	# 			throw $exceptionMessage
+	# 		}catch{
+	# 			Write-Host -fore red "$($subject): $exceptionMessage"
+	# 			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
+	# 			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
+	# 			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
+	# 			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
+	# 		}
+	# 	}
+	# 	return $returnObject
+	# }
 
 }

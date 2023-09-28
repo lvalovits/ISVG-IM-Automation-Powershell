@@ -171,74 +171,95 @@ function Test-LookupContainer(){
 	$containers
 }
 
-function Test-SearchRoles(){
-	$isim_session 		=	[IM_Session]::GetSession()
+function Test-GetRoles(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
 
-	$role_proxy			=	[IM_Role_Proxy]::getProxy()
-	$role_proxy.init()
-	$isim_roles 		= $role_proxy.searchRoles($isim_session.raw , "(errolename=*)")
+        [Parameter(Mandatory)]
+        [int] $port,
 
-	Write-Host "Roles count:		" $isim_roles.count
-	Write-Host "	Static roles:	" $($isim_roles | Where-Object {$_.membership_type() -eq 1}).count
-	Write-Host "	Dynamic roles:	" $($isim_roles | Where-Object {$_.membership_type() -eq 2}).count
-	
-	# Global variable to export organizational structure search result for demo purposes
-	$Global:isim_roles 	= $isim_roles
-	Write-Host -ForegroundColor green 'Roles stored on $Global:isim_roles variable.'
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[string] $pattern
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
+
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New role proxy
+	$role_proxy	=	[IM_Role_Proxy]::new($im_endpoint)
+
+	# Search roles
+	$roles = $role_proxy.searchRoles($im_session, $pattern)
+
+	Write-Host "Roles count:	$($roles.count)"
 	Write-Host
+	$roles
 }
 
-function Test-CreateStaticRoles(){
-	$isim_session 						=	[IM_Session]::GetSession()
-	
-	$role_proxy							=	[IM_Role_Proxy]::getProxy()
-	$ou_proxy							=	[IM_OrganizationalUnit_Proxy]::getProxy()
+function Test-LookupContainer(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
 
-	$isim_organization					=	$ou_proxy.getOrganization( $isim_session.raw )
-	$isim_subtree						=	$ou_proxy.getOrganizationSubTree( $isim_session.raw , $isim_organization.raw)
+        [Parameter(Mandatory)]
+        [int] $port,
 
-	$new_role_name						=	"WS v2 Static Test - " + $(timeStamp)
-	$new_role_desc						=	"Description for WS v2 Static Test - Next role in 5 seconds"
-	$isim_new_staticRole				=	[IM_Role]::New($new_role_name, $new_role_desc)
-	
-	$ws_new_staticRole					=	$role_proxy.getStub()
-	Convert-2WSObject $isim_new_staticRole $ws_new_staticRole
+        [Parameter(Mandatory)]
+        [bool] $secure,
 
-	$isim_role	=	$role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $new_staticRole_ws)
-	Write-Host "Static role created:	" $isim_role.name
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty]
+		[string] $distinguishedName
+    )
 
-	Start-Sleep -Seconds 5
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
 
-	$isim_role.name						=	"WS v2 Static Test - " + $(timeStamp)
-	$isim_role.attributes.description	=	"Description for WS v2 Static Test"
-	
-	$isim_role.attributes.erglobalid	= $null
-	$isim_role.attributes.erparent		= $null
-	$isim_role.attributes.objectclass	= $null
-	
-	$ws_new_staticRole_2				=	$role_proxy.getStub()
-	Convert-2WSObject $isim_role $ws_new_staticRole_2
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
 
-	$isim_role	=	$role_proxy.createStaticRole($isim_session.raw, $isim_subtree.children[0].raw, $ws_new_staticRole_2)
-	Write-Host "Static role created:	" $isim_role.name
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New role proxy
+	$role_proxy	=	[IM_Role_Proxy]::new($im_endpoint)
+
+	# Lookup role based on input DN
+	$roles = $role_proxy.lookupRole($im_session, $distinguishedName)
+
+	Write-Host "Roles count:	$($roles.count)"
+	Write-Host
+	$roles
 }
 
 Test-Init
-Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
 # Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
 
 exit
-Test-SearchRoles
 
-#TODO:	Test-SearchServices
 #TODO:	Test-SearchPerson
-#TOOD:	Test-SearchACI
-#TOOD:	Test-SearchWorkflows
+#TODO:	Test-SearchAccount
+#TODO:	Test-SearchServices
+#TODO:	Test-SearchRoles
 #TODO:	Test-CreateDynamicRoles
 #TODO:	Test-CreateStaticRoles
 #TODO:	Test-CreateProvisioningPolicy
+#TOOD:	Test-SearchACI
+#TOOD:	Test-SearchWorkflows
 
 exit
