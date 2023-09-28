@@ -59,6 +59,7 @@ function Test-EndpointConnection(){
 
 	Write-Host -fore green "Login success"
 	Write-Host
+	$im_session
 }
 
 function Test-GetOrganization(){
@@ -88,11 +89,54 @@ function Test-GetOrganization(){
 	# New organizational proxy
 	$org_proxy	=	[IM_OrganizationalUnit_Proxy]::new($im_endpoint)
 
+	# Search root organizations
 	$root_orgs = $org_proxy.getOrganizationRoot($im_session, $pattern)
+
+	# Search root organizations including subtrees
 	$tree_orgs = $org_proxy.getOrganizationTree($im_session, $pattern)
 
 	Write-Host "Root organizations count:	$($root_orgs.count)"
 	Write-Host "Organization tree count:	$($tree_orgs.count)"
+	Write-Host
+	$root_orgs
+	$tree_orgs
+}
+
+function Test-LookupContainer(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
+
+        [Parameter(Mandatory)]
+        [int] $port,
+
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[Parameter(Mandatory)]
+		[ValidateNotNullOrEmpty]
+		[string] $distinguishedName
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
+
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New organizational proxy
+	$org_proxy	=	[IM_OrganizationalUnit_Proxy]::new($im_endpoint)
+
+	# Lookup container based on input DN
+	$containers = $org_proxy.lookupContainer($im_session, $distinguishedName)
+
+	Write-Host "Container count:	$($containers.count)"
+	Write-Host
+	$containers
 }
 
 function Test-SearchRoles(){
@@ -149,7 +193,10 @@ function Test-CreateStaticRoles(){
 
 Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
+Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
+# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName ""
 
 exit
 Test-SearchRoles

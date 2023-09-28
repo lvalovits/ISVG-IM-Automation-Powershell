@@ -61,7 +61,6 @@ class IM_OrganizationalUnit_Proxy{
 		return $this.getOrganizationRoot($s, $null)
 	}
 
-
 	[IM_Container[]] getOrganizationRoot ([IM_Session] $s, [string] $pattern){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
@@ -103,7 +102,6 @@ class IM_OrganizationalUnit_Proxy{
 		return $this.getOrganizationTree($s, $null)
 	}
 
-
 	[IM_Container[]] getOrganizationTree ([IM_Session] $s, [string] $pattern){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
@@ -124,6 +122,44 @@ class IM_OrganizationalUnit_Proxy{
 					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
 					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
 				}
+
+				$wsReturn | ForEach-Object{
+					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		$($_.name)")
+					$returnObject	+=	([IM_Container]::new($_))
+				}
+			}
+		}catch{
+			Write-Warning "$([IM_OrganizationalUnit_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_OrganizationalUnit_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error retrieving root organizations'
+		}
+		
+		return $returnObject
+	}
+
+	[IM_Container[]] lookupContainer ([IM_Session] $s, [string] $dn){
+		$raw_session		=	$s.raw
+		$returnObject		=	@()
+
+		try{		
+			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieving container by DN")
+			[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Looking up DN: $($dn)")
+
+			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+			$wsReturn	=	$this.proxy.lookupContainer($wsSession, $dn)
+			
+			[utils_logs]::write_log("TRACE", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Retrieved $($wsReturn.count) containers")
+			
+
+			if($wsReturn.count -gt 0) {
+				[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++	Containers retrieved:")
+
+				# if ($pattern){
+				# 	[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
+				# 	$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
+				# }
 
 				$wsReturn | ForEach-Object{
 					[utils_logs]::write_log("DEBUG", "$([IM_OrganizationalUnit_Proxy]::subject):	++		$($_.name)")
