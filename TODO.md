@@ -1,0 +1,31 @@
+# TODO:
+- organize TODOs
+- ~~changelog~~
+- configure log levels
+    - How do Levels Works?
+    	- A log request of level p in a logger with level q is enabled if p >= q.
+		- This rule is at the heart of log4j. It assumes that levels are ordered.
+		- For the standard levels, we have ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF. 
+- readme.txt	(scope|usage|error 1 by 1 on every operation)
+- session expiration time?
+- ldap objects?
+- import-export operation (json object please!!!)
+	- unit test exporting to ~~csv~~ JSON (!) and re-importing it to compare objects
+- ~~replace ISIM by ISVG IM~~
+- endpoints.psm1: SSL checker
+	- Test ICMP - add property to force IPv4 or IPv6
+	- Test self-signed certs
+	- ~~Add support for others security protocols (property files)~~
+	- ~~ServerCertificateValidationCallback	=	true~~
+		- ~~This property allows to run non-secure without any kind of validation~~
+		- ~~Purpose:~~
+		    - ~~If SSL, bypass it~~
+- [utils_properties]::build_endpoints: validate ip_or_hostname input
+- error handlers
+	- Maybe a method/function to avoid repeat the same 5 catch lines?
+	- [utils_properties]
+	- [utils_log]
+	- [utils_connections]
+	- [utils_proxy_wrapper]
+- Structural definitions
+	- ~~Should endpoints have a proxy_list? Gonna think it in the future (my_endpoint.proxy_list.session , my_endpoint.proxy_list.roles , my_endpoint.proxy_list.person).~~ NO.
