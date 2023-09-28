@@ -40,7 +40,7 @@ class IM_Unauth_Proxy{
 	# default constructor cannot be disable.
 	hidden IM_Unauth_Proxy() { throw 'Default constructor disabled. To instance a new proxy use [IM_Unauth_Proxy]::new( [IM_Endpoint] $endpoint )' }
 
-	[string] getItimVersionInfo ( [PSCredential] $IM_Credential ){
+	[string] getItimVersionInfo (){
 
 		try{
 			[utils_logs]::write_log("INFO", "$([IM_Unauth_Proxy]::subject):	++	Getting IM version")

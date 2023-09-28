@@ -83,8 +83,8 @@ function Test-Login(){
 	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
 
 	# IM Login (returns a IM_Session object)
-	if ($creds){
-		$im_session			=	$im_session_proxy.login($creds)
+	if ($credential){
+		$im_session			=	$im_session_proxy.login($credential)
 	}else{
 		$im_session			=	$im_session_proxy.login()
 	}
