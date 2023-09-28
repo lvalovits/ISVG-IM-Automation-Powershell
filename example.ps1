@@ -243,14 +243,14 @@ function Test-LookupRoles(){
 }
 
 Test-Init
-# Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
+# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 exit
 
 #TODO:	Test-SearchPerson

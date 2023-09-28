@@ -1,6 +1,7 @@
 # TODO:
 - organize TODOs
 - ~~changelog~~
+- readme usage section
 - configure log levels
     - How do Levels Works?
     	- A log request of level p in a logger with level q is enabled if p >= q.
