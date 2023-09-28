@@ -51,11 +51,43 @@ function Test-EndpointConnection(){
 	[IM_Endpoint]::test_endpoints_ICMP($im_endpoint)
 	[IM_Endpoint]::test_endpoints_HTTPS($im_endpoint)
 
+	# New unauth proxy
+	$im_unauth_proxy	=	[IM_Unauth_Proxy]::new($im_endpoint)
+
+	# IM Login (returns a IM_Session object)
+	$im_version			=	$im_unauth_proxy.getItimVersionInfo()
+
+	Write-Host -fore green "Endpoint version $($im_version)"
+	Write-Host
+}
+
+function Test-Login(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
+
+        [Parameter(Mandatory)]
+        [int] $port,
+
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[PSCredential] $credential
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+	
 	# New session proxy
 	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
 
 	# IM Login (returns a IM_Session object)
-	$im_session			=	$im_session_proxy.login()
+	if ($creds){
+		$im_session			=	$im_session_proxy.login($creds)
+	}else{
+		$im_session			=	$im_session_proxy.login()
+	}
 
 	Write-Host -fore green "Login success"
 	Write-Host
@@ -194,9 +226,9 @@ function Test-CreateStaticRoles(){
 Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
-Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
-Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName ""
+# Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
+# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
 
 exit
 Test-SearchRoles

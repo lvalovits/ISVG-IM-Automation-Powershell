@@ -12,11 +12,12 @@ using module "..\entities\organizationalUnit.psm1"
 #		$orgUnit_proxy.getOrganizationRoot(<session>, <root_org_name_pattern>) : IM_Container[]
 #		$orgUnit_proxy.getOrganizationTree(<session>) : IM_Container[]
 #		$orgUnit_proxy.getOrganizationTree(<session>, <root_org_name_pattern>) : IM_Container[]
+#		$orgUnit_proxy.lookupContainer(<session>, <container_dn>) : IM_Container[]
 #
 
 class IM_OrganizationalUnit_Proxy{
 
-	static $version 		=	0.2.0
+	static $version 		=	0.2.1
 	hidden static $subject 	=	"im_container_proxy"
 	static $proxies			=	@()
 
