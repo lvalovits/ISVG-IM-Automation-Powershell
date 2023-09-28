@@ -18,7 +18,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 |:------:|:------|
 | 0.x | Invoke-WebRequest parsing xml manually |
 | 1.x | New-WebServiceProxy sharing namespaces with Copy-ISIMObjectNamespace |
-| 2.x | Support to manage multiple endpoints removing proxy and session singletons behavior|
+| 2.x | Support to manage multiple endpoints removing proxy and session singleton behaviors |
 
 ### Planned Functionalities
 - About IM objects:
