@@ -12,6 +12,44 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 * cazdlt:			pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
 * guitarrapc:		for singleton powershell implementation. Link to public gist: https://gist.github.com/guitarrapc/2fde990d166286459c309b7cab03938b
 
+### Version History
+
+| Version | Detail |
+|:------:|:------|
+| 0.x | Invoke-WebRequest parsing xml manually |
+| 1.x | New-WebServiceProxy sharing namespaces with Copy-ISIMObjectNamespace |
+| 2.x | Support to manage multiple endpoints removing proxy and session singletons behavior|
+
+### Planned Functionalities
+- About IM objects:
+
+	|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
+	|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
+	|	People			|			|			|		|			|			|			|			|
+	|	Dynamic Roles	|			|			|		|			|			|			|			|
+	|	Static Roles	|			|			|		|			|			|			|			|
+	|	Prov. Policies	|			|			|		|			|			|			|			|
+	|	Activities		|			|			|		|			|			|			|			|
+	|	Org. Container	|	✅	|			|		|			|			|			|			|
+	|	Services		|			|			|		|			|			|			|			|
+	|	Access			|			|			|		|			|			|			|			|
+	|	Groups			|			|			|		|			|			|			|			|
+	|	Accounts		|			|			|		|			|			|			|			|
+
+- About Use Cases:
+	- [x] User Login
+	- Change/Reset password
+	- Simple utils to do bulk operation (role, person, service, etc)
+		- Creation
+		- Suspend
+		- Delete
+	- Import/Export operation
+		- People
+		- Roles
+		- Policies
+		- ACIs
+		- Workflows/Operations
+
 ### TODO:
 - organize TODOs
 - configure log levels
@@ -44,33 +82,4 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 - Structural definitions
 	- Should endpoints have a proxy_list? Gonna think it in the future (my_endpoint.proxy_list.session , my_endpoint.proxy_list.roles , my_endpoint.proxy_list.person)
 
-
-### Planned Functionalities
-- About IM objects:
-
-	|	Entity			|	Search	|	Lookup	|	Add	|	Delete	|	Suspend	|	Restore	|	Modify	|
-	|:-----------------:|:---------:|:---------:|:-----:|:---------:|:---------:|:---------:|:---------:|
-	|	People			|			|			|		|			|			|			|			|
-	|	Dynamic Roles	|			|			|		|			|			|			|			|
-	|	Static Roles	|			|			|		|			|			|			|			|
-	|	Prov. Policies	|			|			|		|			|			|			|			|
-	|	Activities		|			|			|		|			|			|			|			|
-	|	Org. Container	|	✅	|			|		|			|			|			|			|
-	|	Services		|			|			|		|			|			|			|			|
-	|	Access			|			|			|		|			|			|			|			|
-	|	Groups			|			|			|		|			|			|			|			|
-	|	Accounts		|			|			|		|			|			|			|			|
-
-- About Use Cases:
-	- ✅ User Login
-	- Change/Reset password
-	- Simple utils to do bulk operation (role, person, service, etc)
-		- Creation
-		- Suspend
-		- Delete
-	- Import/Export operation
-		- People
-		- Roles
-		- Policies
-		- ACIs
-		- Workflows/Operations
+**Free Software, Hell Yeah!**
