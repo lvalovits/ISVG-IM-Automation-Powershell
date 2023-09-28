@@ -206,7 +206,7 @@ function Test-GetRoles(){
 	$roles
 }
 
-function Test-LookupContainer(){
+function Test-LookupRoles(){
 	[CmdletBinding()]
     param (
         [Parameter(Mandatory)]
@@ -249,7 +249,9 @@ Test-Init
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
 # Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
-
+# Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
+# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -DistinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
 exit
 
 #TODO:	Test-SearchPerson
