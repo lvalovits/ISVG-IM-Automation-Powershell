@@ -23,6 +23,8 @@ class IM_Role_Proxy{
 	hidden static $subject 	=	"im_role_proxy"
 	static $proxies			=	@()
 
+	static $defaultFilter	=	'(errolename=*)'
+
 	$proxy					=	$null
 	$namespace				=	$null
 	$proxy_wsdl				=	$null
@@ -50,7 +52,7 @@ class IM_Role_Proxy{
 		return $this.searchRoles($s, $null)
 	}
 
-	[IM_Role[]] searchRoles ([IM_Session] $s, [string] $pattern){
+	[IM_Role[]] searchRoles ([IM_Session] $s, [string] $filter){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -58,7 +60,7 @@ class IM_Role_Proxy{
 			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieving roles")
 
 			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-			$wsReturn	=	$this.proxy.searchRoles($wsSession)
+			$wsReturn	=	$this.proxy.searchRoles($wsSession, $filter)
 			
 			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Retrieved $($wsReturn.count) roles")
 			
@@ -66,10 +68,10 @@ class IM_Role_Proxy{
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++	Roles retrieved:")
 
-				if ($pattern){
-					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
-					$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
-				}
+				# if ($pattern){
+				# 	[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
+				# 	$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
+				# }
 
 				$wsReturn | ForEach-Object{
 					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		$($_.name)")

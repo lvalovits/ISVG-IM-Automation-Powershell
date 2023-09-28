@@ -147,7 +147,6 @@ function Test-LookupContainer(){
         [bool] $secure,
 
 		[Parameter(Mandatory)]
-		[ValidateNotNullOrEmpty]
 		[string] $distinguishedName
     )
 
@@ -219,7 +218,6 @@ function Test-LookupRoles(){
         [bool] $secure,
 
 		[Parameter(Mandatory)]
-		[ValidateNotNullOrEmpty]
 		[string] $distinguishedName
     )
 
