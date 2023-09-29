@@ -44,11 +44,11 @@ class IM_Person_Proxy{
 		}
 	}
 
-	[IM_Person[]] searchPersonFromRoot ([IM_Session] $s){
-		return $this.searchPersonFromRoot($s, $null)
+	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s){
+		return $this.searchPersonsFromRoot($s, $null)
 	}
 
-	[IM_Person[]] searchPersonFromRoot ([IM_Session] $s, [string] $filter){
+	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string] $filter){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -56,7 +56,7 @@ class IM_Person_Proxy{
 			[utils_logs]::write_log("TRACE", "$([IM_Person_Proxy]::subject):	++	Retrieving persons")
 
 			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-			$wsReturn	=	$this.proxy.searchPersonFromRoot($wsSession, $filter)
+			$wsReturn	=	$this.proxy.searchPersonsFromRoot($wsSession, $filter)
 			
 			[utils_logs]::write_log("TRACE", "$([IM_Person_Proxy]::subject):	++	Retrieved $($wsReturn.count) persons")
 			

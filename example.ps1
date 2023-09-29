@@ -274,7 +274,7 @@ function Test-GetPersons(){
 	$person_proxy	=	[IM_Person_Proxy]::new($im_endpoint)
 
 	# Search persons
-	$persons = $person_proxy.searchPersonFromRoot($im_session, $pattern)
+	$persons = $person_proxy.searchPersonsFromRoot($im_session, $pattern)
 
 	Write-Host "Persons count:	$($persons.count)"
 	Write-Host
