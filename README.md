@@ -1,7 +1,7 @@
 # ISVG-IM-Powershell
 IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for automation
 
-![Static Badge](https://img.shields.io/badge/version-2.3.2-green)
+![Static Badge](https://img.shields.io/badge/version-2.3.3b-green)
 ![Static Badge](https://img.shields.io/badge/status-on%20development-yellowgreen)
 ![GitHub top language](https://img.shields.io/github/languages/top/lvalovits/ISVG-IM-Powershell?logo=powershell)
 ![Static Badge](https://img.shields.io/badge/PowerShell-v5.1-blue?logo=powershell)
@@ -29,7 +29,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 
 	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Suspend	|	Restore	|	Modify	|
 	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
-	|	People			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
+	|	People			|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
 	|	Dynamic Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
 	|	Static Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
 	|	Prov. Policies	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|

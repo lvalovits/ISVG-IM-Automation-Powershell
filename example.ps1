@@ -242,6 +242,77 @@ function Test-LookupRoles(){
 	$roles
 }
 
+function Test-GetPersons(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
+
+        [Parameter(Mandatory)]
+        [int] $port,
+
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[string] $pattern
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
+
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New person proxy
+	$person_proxy	=	[IM_Person_Proxy]::new($im_endpoint)
+
+	# Search persons
+	$persons = $person_proxy.searchPersonFromRoot($im_session, $pattern)
+
+	Write-Host "Persons count:	$($persons.count)"
+	Write-Host
+	$persons
+}
+
+function Test-LookupPersons(){
+	[CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $ip_or_hostname,
+
+        [Parameter(Mandatory)]
+        [int] $port,
+
+        [Parameter(Mandatory)]
+        [bool] $secure,
+
+		[Parameter(Mandatory)]
+		[string] $distinguishedName
+    )
+
+	# New IM endpoint
+	$im_endpoint		=	[IM_Endpoint]::new($ip_or_hostname, $port, $secure)
+
+	# New session proxy
+	$im_session_proxy	=	[IM_Session_Proxy]::new($im_endpoint)
+
+	# A valid session is required to retrieve info from IM
+	$im_session			=	$im_session_proxy.login()
+
+	# New person proxy
+	$person_proxy	=	[IM_Person_Proxy]::new($im_endpoint)
+
+	# Lookup persons based on input DN
+	$persons = $person_proxy.lookupPerson($im_session, $distinguishedName)
+
+	Write-Host "Persons count:	$($persons.count)"
+	Write-Host
+	$persons
+}
+
 Test-Init
 Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
@@ -251,6 +322,9 @@ Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
 # Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+# Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
+# Test-LookupPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=0000000000000000001,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 exit
 
 #TODO:	Test-SearchPerson

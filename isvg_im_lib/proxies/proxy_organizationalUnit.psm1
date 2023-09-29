@@ -7,8 +7,7 @@ using module "..\entities\organizationalUnit.psm1"
 
 #
 #	usage:
-#		$session_proxy	=	[IM_Session_Proxy]::new(<im_endpoint>) : [IM_Session_Proxy]
-#
+#		$orgUnit_proxy	=	[IM_Session_Proxy]::new(<im_endpoint>) : [IM_Session_Proxy]
 #		$orgUnit_proxy.getOrganizationRoot(<session>) : IM_Container[]
 #		$orgUnit_proxy.getOrganizationRoot(<session>, <root_org_name_pattern>) : IM_Container[]
 #		$orgUnit_proxy.getOrganizationTree(<session>) : IM_Container[]

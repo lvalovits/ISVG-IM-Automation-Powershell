@@ -6,15 +6,12 @@ using module "..\entities\session.psm1"
 using module "..\entities\Role.psm1"
 
 #
-#	DO NOT:
-#		[IM_Role_Proxy]::new()
 #	usage:
-#		$role_proxy	=	[IM_Role_Proxy]::getProxy()
-#		$role_proxy.init() : void
+#		$role_proxy	=	[IM_Role_Proxy]::new(<im_endpoint>) : [IM_Role_Proxy]
+#		$role_proxy.searchRoles( <raw_session> ) : IM_Role[]
 #		$role_proxy.searchRoles( <raw_session> , <filter> ) : IM_Role[]
-#		$role_proxy.createStaticRole ( <raw_session> , <raw_container> , <raw_role> ) : IM_Role
-#		$role_proxy.getRawRole ( <IM_Role> ) : raw_role
-#		$role_proxy.getStub() : raw_role
+#		$role_proxy.lookupRole( <raw_session> , <role_dn> ) : IM_Role[]
+
 #
 
 class IM_Role_Proxy{
@@ -22,8 +19,6 @@ class IM_Role_Proxy{
 	static $version 		=	0.2.0
 	hidden static $subject 	=	"im_role_proxy"
 	static $proxies			=	@()
-
-	static $defaultFilter	=	'(errolename=*)'
 
 	$proxy					=	$null
 	$namespace				=	$null
@@ -121,45 +116,4 @@ class IM_Role_Proxy{
 		
 		return $returnObject
 	}
-
-	# [IM_Role] createStaticRole ( $raw_session, $raw_container, $raw_role ){
-		
-	# 	$subject			=	"createStaticRole"
-	# 	$returnObject		=	$null
-	# 	$returnArray		=	@()
-	# 	$exceptionMessage	=	$null
-
-	# 	if ($null -ne $this.proxy){
-	# 		try{
-	# 			$wsSession		=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-	# 			$wsContainer	=	Copy-ISIMObjectNamespace $raw_container $this.namespace
-				
-	# 			$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $raw_role)
-		
-	# 			if($null -ne $wsReturn) {
-	# 				$returnObject		=	[IM_Role]::new($wsReturn)
-	# 			}
-	# 		}catch{
-	# 			$exceptionMessage	=	"Error creating role"
-	# 			Write-Host -fore red "$($subject): $exceptionMessage"
-	# 			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-	# 			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-	# 			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-	# 			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-	# 		}
-	# 	}else{
-	# 		try{
-	# 			$exceptionMessage	=	"Proxy not found."
-	# 			throw $exceptionMessage
-	# 		}catch{
-	# 			Write-Host -fore red "$($subject): $exceptionMessage"
-	# 			write_log "error" "$($subject):	+ $($exceptionMessage) [ $($PSItem.exception.gettype()) ]"
-	# 			write_log "trace" "$($subject):	++	Exception:	$($PSItem)"
-	# 			write_log "trace" "$($subject):	++	Ex.Message:	$($PSItem.exception.Message)"
-	# 			write_log "trace" "$($subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber)."
-	# 		}
-	# 	}
-	# 	return $returnObject
-	# }
-
 }

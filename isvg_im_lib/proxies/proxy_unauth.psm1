@@ -5,10 +5,8 @@ using module "..\entities\endpoint.psm1"
 
 #
 #	usage:
-#		$session_proxy	=	[IM_Unauth_Proxy]::new(<im_endpoint>) : [IM_Unauth_Proxy]
-#		$session_proxy.login() : [IM_Session]
-#		$session_proxy.login(<creds>) : [IM_Session]
-#		$session_proxy.logout() : void
+#		$unauth_proxy	=	[IM_Unauth_Proxy]::new(<im_endpoint>) : [IM_Unauth_Proxy]
+#		$unauth_proxy.getItimVersionInfo() : [String]
 #
 
 class IM_Unauth_Proxy{
