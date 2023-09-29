@@ -1,9 +1,9 @@
 #
 #	usage:
-#		[IM_Role]::new( <raw_role> )
+#		[IM_Person]::new( <raw_role> )
 #
 
-class IM_Role{
+class IM_Person{
 
 	$raw
 	
@@ -35,9 +35,9 @@ class IM_Role{
 		SUB_UNIT				=	"2"		
 	}
 
-	hidden IM_Role () {}
+	hidden IM_Person () {}
 
-	IM_Role ( $raw_role ){
+	IM_Person ( $raw_role ){
 		$this.raw			=	$raw_role
 		$this.name			=	$raw_role.Name
 		$this.description	=	$raw_role.description
@@ -48,12 +48,12 @@ class IM_Role{
 		}
 	}
 	
-	IM_Role ( [string]$name, [string]$description ){
+	IM_Person ( [string]$name, [string]$description ){
 		$this.name							=	$name
 		$this.attributes.description		=	$description
 	}
 
-	IM_Role ( [string]$name, [string]$description, [int]$scope, [string]$membership_rule ){
+	IM_Person ( [string]$name, [string]$description, [int]$scope, [string]$membership_rule ){
 		$this.name							=	$name
 		$this.attributes.description		=	$description
 		$this.attributes.erjavascript		=	$membership_rule
