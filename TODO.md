@@ -1,13 +1,12 @@
 # TODO:
 - organize TODOs
 - ~~changelog~~
-- readme usage section
+- usage section (get-help)
 - configure log levels
     - How do Levels Works?
     	- A log request of level p in a logger with level q is enabled if p >= q.
 		- This rule is at the heart of log4j. It assumes that levels are ordered.
-		- For the standard levels, we have ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF. 
-- readme.txt	(scope|usage|error 1 by 1 on every operation)
+		- For the standard levels, we have ALL < DEBUG < INFO < WARN < ERROR < FATAL < OFF.
 - session expiration time?
 - ldap objects?
 - import-export operation (json object please!!!)

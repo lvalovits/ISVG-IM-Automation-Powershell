@@ -3,7 +3,7 @@ using module "..\utils\utils_logs.psm1"
 
 using module "..\entities\endpoint.psm1"
 using module "..\entities\session.psm1"
-using module "..\entities\Role.psm1"
+using module "..\entities\role.psm1"
 
 #
 #	usage:
@@ -11,7 +11,6 @@ using module "..\entities\Role.psm1"
 #		$role_proxy.searchRoles( <raw_session> ) : IM_Role[]
 #		$role_proxy.searchRoles( <raw_session> , <filter> ) : IM_Role[]
 #		$role_proxy.lookupRole( <raw_session> , <role_dn> ) : IM_Role[]
-
 #
 
 class IM_Role_Proxy{
@@ -62,11 +61,6 @@ class IM_Role_Proxy{
 
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++	Roles retrieved:")
-
-				# if ($pattern){
-				# 	[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
-				# 	$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
-				# }
 
 				$wsReturn | ForEach-Object{
 					[utils_logs]::write_log("DEBUG", "$([IM_Role_Proxy]::subject):	++		$($_.name)")

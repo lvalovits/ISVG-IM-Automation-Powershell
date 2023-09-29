@@ -1,8 +1,3 @@
-#
-#	usage:
-#		[IM_Role]::new( <raw_role> )
-#
-
 class IM_Role{
 
 	$raw

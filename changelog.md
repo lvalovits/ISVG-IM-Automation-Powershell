@@ -5,6 +5,7 @@
 	- new method `searchPersonFromRoot (session)`
 	- new method `searchPersonFromRoot (session, filter)`
 	- new method `lookupPerson (session, dn)`
+	- new entity object `IM_Person`
 ##### Changed
 - **Examples**
 	- new funcionts to test `searchPersonFromRoot` and `lookupPerson` methods

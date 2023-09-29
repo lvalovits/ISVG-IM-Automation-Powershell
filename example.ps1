@@ -1,12 +1,16 @@
 using module ".\isvg_im_lib\entities\endpoint.psm1"
 using module ".\isvg_im_lib\entities\session.psm1"
-using module ".\isvg_im_lib\entities\role.psm1"
 using module ".\isvg_im_lib\entities\organizationalUnit.psm1"
+using module ".\isvg_im_lib\entities\role.psm1"
+using module ".\isvg_im_lib\entities\person.psm1"
+
+using module ".\isvg_im_lib\entities\custom_person.psm1"
 
 using module ".\isvg_im_lib\proxies\proxy_unauth.psm1"
 using module ".\isvg_im_lib\proxies\proxy_session.psm1"
-using module ".\isvg_im_lib\proxies\proxy_role.psm1"
 using module ".\isvg_im_lib\proxies\proxy_organizationalUnit.psm1"
+using module ".\isvg_im_lib\proxies\proxy_role.psm1"
+using module ".\isvg_im_lib\proxies\proxy_person.psm1"
 
 using module ".\isvg_im_lib\utils\utils_properties.psm1"
 using module ".\isvg_im_lib\utils\utils_logs.psm1"
@@ -313,8 +317,8 @@ function Test-LookupPersons(){
 	$persons
 }
 
-Test-Init
-Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+# Test-Init
+# Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
@@ -324,8 +328,12 @@ Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 # Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=0000000000000000001,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+# Test-LookupPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=00000000000000000007,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 exit
+
+$ip_or_hostname = "google.com"
+$port = 443
+$secure = $TRUE
 
 #TODO:	Test-SearchPerson
 #TODO:	Test-SearchAccount
