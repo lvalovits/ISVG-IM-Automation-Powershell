@@ -317,8 +317,8 @@ function Test-LookupPersons(){
 	$persons
 }
 
-# Test-Init
-# Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
+Test-Init
+Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
 # Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
