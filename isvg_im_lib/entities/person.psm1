@@ -5,7 +5,7 @@ class IM_Person{
 	[string]$name
 	[string]$profileName
 	[string]$itimDN
-	[array]$attributes = @{}
+	$attributes = @{}
 	# $attributes	=	@{
 	# 	ercustomdisplay		=	$null
 	# 	erglobalid			=	$null
