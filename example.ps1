@@ -317,23 +317,24 @@ function Test-LookupPersons(){
 	$persons
 }
 
-Test-Init
-Test-EndpointConnection -ip_or_hostname "google.com" -port 443 -secure $TRUE
-# Test-Login -ip_or_hostname "google.com" -port 443 -secure $TRUE
-# Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE
-# Test-GetOrganization -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupContainer -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
-# Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE
-# Test-GetRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupRoles -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
-# Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE
-# Test-GetPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -pattern "foo*"
-# Test-LookupPersons -ip_or_hostname "google.com" -port 443 -secure $TRUE -distinguishedName "erglobalid=00000000000000000007,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
-exit
-
 $ip_or_hostname = "google.com"
 $port = 443
 $secure = $TRUE
+
+Test-Init
+Test-EndpointConnection -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-Login -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-GetOrganization -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-GetOrganization -ip_or_hostname $ip_or_hostname -port $port -secure $secure -pattern "foo*"
+# Test-LookupContainer -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=6329215222743470485,ou=Acme,dc=isim"
+# Test-GetRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-GetRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure -pattern "foo*"
+# Test-LookupRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -pattern "foo*"
+# Test-LookupPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=00000000000000000007,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+exit
+
 
 #TODO:	Test-SearchPerson
 #TODO:	Test-SearchAccount
