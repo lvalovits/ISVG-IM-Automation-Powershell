@@ -1,6 +1,17 @@
 # TODO:
 - organize TODOs
 - ~~changelog~~
+- define migration items
+	- im objects
+		- provisioning policies
+		- access
+		- itim groups ?
+		- containers
+		- roles
+	- ldap objects
+		- aci
+		- views
+		- workflows / operations
 - usage section (get-help)
 - configure log levels
     - How do Levels Works?

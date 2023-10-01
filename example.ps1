@@ -258,7 +258,7 @@ function Test-GetPersons(){
         [Parameter(Mandatory)]
         [bool] $secure,
 
-		[string] $pattern
+		[string] $ldap_filter
     )
 
 	# New IM endpoint
@@ -274,7 +274,7 @@ function Test-GetPersons(){
 	$person_proxy	=	[IM_Person_Proxy]::new($im_endpoint)
 
 	# Search persons
-	$persons = $person_proxy.searchPersonsFromRoot($im_session, $pattern)
+	$persons = $person_proxy.searchPersonsFromRoot($im_session, $ldap_filter)
 
 	Write-Host "Persons count:	$($persons.count)"
 	Write-Host
@@ -330,16 +330,15 @@ Test-EndpointConnection -ip_or_hostname $ip_or_hostname -port $port -secure $sec
 # Test-GetRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure
 # Test-GetRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure -pattern "foo*"
 # Test-LookupRoles -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=1695361430646039633,ou=roles,erglobalid=00000000000000000000,ou=Acme,dc=isim"
-Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure
-# Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -pattern "foo*"
-# Test-LookupPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=00000000000000000007,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
+# Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure
+# Test-GetPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -ldap_filter "(cn=*system*)"
+# Test-LookupPersons -ip_or_hostname $ip_or_hostname -port $port -secure $secure -distinguishedName "erglobalid=00000000000000000007,ou=0,ou=people,erglobalid=00000000000000000000,ou=Acme,dc=isim"
 exit
 
 
-#TODO:	Test-SearchPerson
+
 #TODO:	Test-SearchAccount
 #TODO:	Test-SearchServices
-#TODO:	Test-SearchRoles
 #TODO:	Test-CreateDynamicRoles
 #TODO:	Test-CreateStaticRoles
 #TODO:	Test-CreateProvisioningPolicy

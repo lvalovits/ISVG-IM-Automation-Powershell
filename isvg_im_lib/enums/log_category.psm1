@@ -4,8 +4,4 @@ Class LOG_CATEGORY{
 	static $TRC	=	"TRACE"
 	static $ERR	=	"ERROR"
 	static $DEB	=	"DEBUG"
-
-	static [void] _init_(){
-		
-	}
 }

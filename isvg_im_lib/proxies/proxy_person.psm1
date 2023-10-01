@@ -47,14 +47,14 @@ class IM_Person_Proxy{
 	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s){
 		return $this.searchPersonsFromRoot($s, $null, $null)
 	}
-	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string] $filter){
-		return $this.searchPersonsFromRoot($s, $filter, $null)
+	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string] $ldap_filter){
+		return $this.searchPersonsFromRoot($s, $ldap_filter, $null)
 	}
 	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string[]] $attributeList){
 		return $this.searchPersonsFromRoot($s, $null, $attributeList)
 	}
 
-	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string] $filter, [string[]] $attributeList){
+	[IM_Person[]] searchPersonsFromRoot ([IM_Session] $s, [string] $ldap_filter, [string[]] $attributeList){
 		$raw_session		=	$s.raw
 		$returnObject		=	@()
 
@@ -62,18 +62,13 @@ class IM_Person_Proxy{
 			[utils_logs]::write_log("TRACE", "$([IM_Person_Proxy]::subject):	++	Retrieving persons")
 
 			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
-			$wsReturn	=	$this.proxy.searchPersonsFromRoot($wsSession, $filter, $attributeList)
+			$wsReturn	=	$this.proxy.searchPersonsFromRoot($wsSession, $ldap_filter, $attributeList)
 			
 			[utils_logs]::write_log("TRACE", "$([IM_Person_Proxy]::subject):	++	Retrieved $($wsReturn.count) persons")
 			
 
 			if($wsReturn.count -gt 0) {
 				[utils_logs]::write_log("DEBUG", "$([IM_Person_Proxy]::subject):	++	Roles retrieved:")
-
-				# if ($pattern){
-				# 	[utils_logs]::write_log("DEBUG", "$([IM_Person_Proxy]::subject):	++		Filtering results based on pattern: '$($pattern)'")
-				# 	$wsReturn	=	$wsReturn | Where-Object { $_.name -like $pattern}
-				# }
 
 				$wsReturn | ForEach-Object{
 					[utils_logs]::write_log("DEBUG", "$([IM_Person_Proxy]::subject):	++		$($_.name)")
