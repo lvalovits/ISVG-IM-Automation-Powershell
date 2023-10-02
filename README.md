@@ -27,7 +27,7 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ## Planned Functionalities
 - About IM objects:
 
-	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Suspend	|	Restore	|	Modify	<br> fdsaf|
+	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Suspend	|	Restore	|	Modify	|
 	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
 	|	People			|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
 	|	Dynamic Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
