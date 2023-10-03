@@ -23,8 +23,8 @@ Could it have been Java? Maybe. But at this point, PowerShell surprised me more 
 |	0.x		|	Invoke-WebRequest parsing xml manually												|
 |	1.x		|	New-WebServiceProxy sharing namespaces with Copy-ISIMObjectNamespace				|
 |	2.x		|	Support to manage multiple endpoints removing proxy and session singleton behaviors	|
-|   2.5+	|	(planned) Support for json objects													|
-|   3.0+	|	(planned) Import/Export functionalities												|
+|   3.0+	|	(planned) Support for json objects													|
+|   3.5+	|	(planned) Import/Export functionalities												|
 
 ## Planned Functionalities
 - About IM objects:
