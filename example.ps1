@@ -317,11 +317,16 @@ function Test-LookupPersons(){
 	$persons
 }
 
-# $ip_or_hostname = "google.com"
-# $port = 443
-# $secure = $TRUE
-# ([IM_Session_Proxy]::new([IM_Endpoint]::new($ip_or_hostname, $port, $secure))).login()
-# [IM_Endpoint]::endpoints[0]
+$ip_or_hostname = "google.com"
+$port = 443
+$secure = $TRUE
+
+# manual test:
+	# ([IM_Session_Proxy]::new([IM_Endpoint]::new($ip_or_hostname, $port, $secure))).login()
+	# $proxy = [IM_Person_Proxy]::new([IM_Endpoint]::endpoints[0])
+	# $s = Copy-ISIMObjectNamespace ([IM_Session]::sessions[0].raw) $($proxy.namespace)
+	# $proxy.wsMethod($s, $x, $y)
+
 
 
 # Initialize properties and log files
