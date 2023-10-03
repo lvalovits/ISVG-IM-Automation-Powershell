@@ -8,6 +8,12 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/ms-vscode.powershell?logo=visualstudiocode)
 ![GitHub](https://img.shields.io/github/license/lvalovits/ISVG-IM-Powershell)
 
+## First things first - Why powershell?
+The idea was to create something that requires no additional installations to run on any server. A scripting language was the only option.
+Could it have been Java? Maybe. But at this point, PowerShell surprised me more than expected and I want to continue exploring this path.
+
+**Free Software, Hell Yeah!**
+
 ## References:
  * philipp1184:	for his great work understanding the namespaces on New-WebServiceProxy with <Copy-ISIMObjectNamespace> and <Convert-2WSAttr> functions. Link to public repo: https://github.com/philipp1184/isim-powershell
 * cazdlt:			pyisim project was a reference for much of the structure of this project. Link to public repo: https://github.com/cazdlt/pyisim
@@ -21,8 +27,6 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 |	2.x		|	Support to manage multiple endpoints removing proxy and session singleton behaviors	|
 |   2.5+	|	(planned) Support for json objects													|
 |   3.0+	|	(planned) Import/Export functionalities												|
-
-**Free Software, Hell Yeah!**
 
 ## Planned Functionalities
 - About IM objects:
