@@ -27,18 +27,17 @@ IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for a
 ## Planned Functionalities
 - About IM objects:
 
-	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Suspend	|	Restore	|	Modify	|
-	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
-	|	People			|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
-	|	Dynamic Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Static Roles	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Prov. Policies	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Activities		|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&cross;	|	&cross;	|	&cross;	|
-	|	Org. Container	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Services		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Access			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Groups			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&#9744;	|
-	|	Accounts		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|
+	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Modify	|	Extras	|
+	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
+	|	People			|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Restore	<br>	&#9744;	Suspend	<br>	&#9744;	Transfer	<br>	&#9744;	Get roles	<br>	&#9744;	Add role	<br>	&#9744;	Remove role	<br>	&#9744;	Get accounts	|
+	|	Roles	|	&#9745;	|	&#9745;	|	&#9744;	Static	<br>	&#9744;	Dynamic	|	&#9744;	|	&#9744;	Static	<br>	&#9744;	Dynamic	|	&#9744;	Get members	|
+	|	Prov. Policies	|	&#9744;	|	&cross;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|
+	|	Activities		|	&#9744;	|	&#9744;	|	&cross;	|	&cross;	|	&cross;	|	&quest;	|
+	|	Org. Container	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Move	|
+	|	Services		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Get accounts	<br>	&#9744;	Get support data	<br>	&#9744;	Test connection	<br>	&#9744;	Enforce Policy for Service (?)	|
+	|	Access			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|
+	|	Groups			|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|
+	|	Accounts		|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Restore	<br>	&#9744;	Suspend	<br>	&#9744;	Orphan	<br>	&#9744;	Adopt	<br>	&#9744;	Get Orphans	<br>	|
 
 - About Use Cases:
 	- [x] User Login

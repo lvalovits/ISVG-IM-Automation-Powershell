@@ -5,7 +5,8 @@ class IM_Person{
 	[string]$name
 	[string]$profileName
 	[string]$itimDN
-	$attributes = @{}
+	
+	$attributes = @{}	#	No attributes list defined to support multiple person types (ie. inetorg, bp, custom person types)
 	# $attributes	=	@{
 	# 	ercustomdisplay		=	$null
 	# 	erglobalid			=	$null
