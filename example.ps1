@@ -317,9 +317,12 @@ function Test-LookupPersons(){
 	$persons
 }
 
-$ip_or_hostname = "google.com"
-$port = 443
-$secure = $TRUE
+# $ip_or_hostname = "google.com"
+# $port = 443
+# $secure = $TRUE
+# ([IM_Session_Proxy]::new([IM_Endpoint]::new($ip_or_hostname, $port, $secure))).login()
+# [IM_Endpoint]::endpoints[0]
+
 
 # Initialize properties and log files
 Test-Init
