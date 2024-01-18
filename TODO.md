@@ -1,5 +1,8 @@
 # TODO:
 - organize TODOs
+- deprecate im.properties
+	- deprecate: [utils_properties]::PROPERTIES.IM.SSLPROTOCOL at endpoint.psm1
+	- deprecate: set_ssl_as_bool function at utils_properties.psm1
 - ~~changelog~~
 - define migration items
 	- im objects

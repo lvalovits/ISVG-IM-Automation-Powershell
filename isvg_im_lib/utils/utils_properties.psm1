@@ -6,14 +6,12 @@ Class utils_properties{
 	static $PROPERTY_FILE_PATH	=	@{
 		IM		=	Convert-Path "$($GLOBAL:PWD)\im.properties"
 		LIB			=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\lib.properties"
-		XML_REQUEST	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\requests.properties"
 		WSDL_FILES	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\wsdl.properties"
 	}
 
 	static $PROPERTIES	=	@{
 		IM		=	@{}
 		LIB			=	@{}
-		XML_REQUEST	=	@{}
 		WSDL_FILES	=	@{}
 		ENDPOINTS	=	@{}
 	}
@@ -23,7 +21,6 @@ Class utils_properties{
 		[utils_properties]::PROPERTY_FILE_PATH	=	@{
 			IM		=	Convert-Path "$($GLOBAL:PWD)\im.properties"
 			LIB			=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\lib.properties"
-			XML_REQUEST	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\requests.properties"
 			WSDL_FILES	=	Convert-Path "$($GLOBAL:PWD)\isvg_im_lib\properties\wsdl.properties"
 		}
 	}

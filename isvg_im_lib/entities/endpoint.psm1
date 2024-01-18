@@ -58,7 +58,10 @@ Class IM_Endpoint{
 		return $ret
 	}
 
+	#deprecated
 	IM_Endpoint(){
+
+		Write-Warning "IM_Endpoint() is currently deprecated. Use IM_Endpoing( <IP_OR_HOSTNAME>, <PORT>, <SSL> )"
 
 		$this.secure			=	[utils_properties]::PROPERTIES.IM.SSL
 		$this.ip_or_hostname	=	[utils_properties]::PROPERTIES.IM.APP_HOST
