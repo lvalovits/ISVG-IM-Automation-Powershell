@@ -2,10 +2,8 @@
 IBM Security Verify Governance Identity Manager (frm ISIM) powershell libs for automation
 
 ![Static Badge](https://img.shields.io/badge/version-2.3.3c-green)
-![Static Badge](https://img.shields.io/badge/status-on%20development-yellowgreen)
 ![GitHub top language](https://img.shields.io/github/languages/top/lvalovits/ISVG-IM-Powershell?logo=powershell)
 ![Static Badge](https://img.shields.io/badge/PowerShell-v5.1-blue?logo=powershell)
-![Visual Studio Marketplace Version (including pre-releases)](https://img.shields.io/visual-studio-marketplace/v/ms-vscode.powershell?logo=visualstudiocode)
 ![GitHub](https://img.shields.io/github/license/lvalovits/ISVG-IM-Powershell)
 
 ## First things first - Why powershell?
@@ -25,8 +23,8 @@ Could it have been Java? Maybe. But at this point, PowerShell surprised me more 
 |	0.x		|	Invoke-WebRequest parsing xml manually												|
 |	1.x		|	New-WebServiceProxy sharing namespaces with Copy-ISIMObjectNamespace				|
 |	2.x		|	Support to manage multiple endpoints removing proxy and session singleton behaviors	|
-|   2.5+	|	(planned) Support for json objects													|
-|   3.0+	|	(planned) Import/Export functionalities												|
+|   3.0+	|	(planned) Support for json objects													|
+|   3.5+	|	(planned) Import/Export functionalities												|
 
 ## Planned Functionalities
 - About IM objects:
