@@ -1,9 +1,11 @@
 using module "..\utils\utils_properties.psm1"
 using module "..\utils\utils_logs.psm1"
+using module "..\utils\utils_proxy.psm1"
 
 using module "..\entities\endpoint.psm1"
 using module "..\entities\session.psm1"
 using module "..\entities\role.psm1"
+using module "..\entities\organizationalUnit.psm1"
 
 #
 #	usage:
@@ -106,6 +108,35 @@ class IM_Role_Proxy{
 			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
 			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
 			throw 'Error retrieving roles'
+		}
+		
+		return $returnObject
+	}
+
+	[IM_Role[]] createStaticRole ([IM_Session] $s, [IM_Container] $c, [IM_Role] $r){
+		$raw_session		=	$s.raw
+		$raw_container		=	$c.raw
+		$returnObject		=	@()
+
+		try{		
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Creating static role")
+
+			$wsSession	=	Copy-ISIMObjectNamespace $raw_session $this.namespace
+			$wsContainer =	Copy-ISIMObjectNamespace $raw_container $this.namespace
+
+			$global:wsRole = Convert-2WSObject $r (New-Object $($this.namespace + ".WSRole"))
+
+			$wsReturn	=	$this.proxy.createStaticRole($wsSession, $wsContainer, $global:wsRole)
+			
+			[utils_logs]::write_log("TRACE", "$([IM_Role_Proxy]::subject):	++	Static role creation return: $($wsReturn)")
+			
+
+		}catch{
+			Write-Warning "$([IM_Role_Proxy]::subject): $($PSItem)"
+			[utils_logs]::write_log("error", "$([IM_Role_Proxy]::subject):	++	Exception:	$($PSItem)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	Ex.Message:	$($PSItem.exception.Message)")
+			[utils_logs]::write_log("debug", "$([IM_Role_Proxy]::subject):	++	$($PSItem.InvocationInfo.Scriptname.toString().split('\')[-1]):$($PSItem.InvocationInfo.ScriptLineNumber).")
+			throw 'Error creating static role'
 		}
 		
 		return $returnObject

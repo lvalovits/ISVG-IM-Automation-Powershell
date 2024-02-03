@@ -6,7 +6,7 @@ class IM_Role{
 	[string]$description
 	[string]$itimDN
 	
-	$attributes	=	@{
+	[hashtable] $attributes	=	@{
 		erglobalid				=	$null
 		errolename				=	$null
 		erscope					=	$null
@@ -55,7 +55,7 @@ class IM_Role{
 		$this.attributes.erscope			=	$scope
 	}
 
-	[Int] membership_type (){
+	hidden [Int] membership_type (){
 		if (($null -eq $this.attributes.erjavascript) -and ($null -eq $this.attributes.erscope)){
 			return 1	# static role
 		}elseif((($null -ne $this.attributes.erjavascript) -and ($null -ne $this.attributes.erscope))){
@@ -63,6 +63,14 @@ class IM_Role{
 		}else{
 			return -1
 		}
+	}
+
+	[bool] isStatic (){
+		return ($this.membership_type -eq 1)
+	}
+
+	[bool] isDynamic (){
+		return ($this.membership_type -eq 2)
 	}
 
 }

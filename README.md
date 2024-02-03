@@ -32,7 +32,7 @@ Could it have been Java? Maybe. But at this point, PowerShell surprised me more 
 	|	Entity			|	Search	|	Lookup	|	Add		|	Delete	|	Modify	|	Extras	|
 	|:-----------------:|:---------:|:---------:|:---------:|:---------:|:---------:|:---------:|
 	|	People			|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Restore	<br>	&#9744;	Suspend	<br>	&#9744;	Transfer	<br>	&#9744;	Get roles	<br>	&#9744;	Add role	<br>	&#9744;	Remove role	<br>	&#9744;	Get accounts	|
-	|	Roles	|	&#9745;	|	&#9745;	|	&#9744;	Static	<br>	&#9744;	Dynamic	|	&#9744;	|	&#9744;	Static	<br>	&#9744;	Dynamic	|	&#9744;	Get members	|
+	|	Roles	|	&#9745;	|	&#9745;	|	&#9745;	Static	<br>	&#9744;	Dynamic	|	&#9744;	|	&#9744;	Static	<br>	&#9744;	Dynamic	|	&#9744;	Get members	|
 	|	Prov. Policies	|	&#9744;	|	&cross;	|	&#9744;	|	&#9744;	|	&#9744;	|	&cross;	|
 	|	Activities		|	&quest;	|	&quest;	|	&cross;	|	&cross;	|	&cross;	|	&quest;	|
 	|	Org. Container	|	&#9745;	|	&#9745;	|	&#9744;	|	&#9744;	|	&#9744;	|	&#9744;	Move	|

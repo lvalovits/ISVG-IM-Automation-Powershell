@@ -1,5 +1,12 @@
 # TODO:
 - organize TODOs
+- Issue tracker
+	- ISSUE #1:	SSL Checker
+	- ISSUE #2:	Copy-ISIMObjectNamespace
+	- ISSUE #3:	im_container_proxy:lookupContainer
+	- ISSUE #4:	Test-MigrateRoles
+	
+- Proxy tester function
 - deprecate im.properties
 	- deprecate: [utils_properties]::PROPERTIES.IM.SSLPROTOCOL at endpoint.psm1
 	- deprecate: set_ssl_as_bool function at utils_properties.psm1
